@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bolerama Coyoacán • Torneo 49 Aniversario 2026</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Barlow Condensed', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              red: '#B91C1C',
+              dark: '#0B0F19',
+              card: '#161E2E',
+              border: '#27354A',
+              gold: '#F59E0B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0B0F19; color: #F3F4F6; }
+    .fade-in { animation: fadeIn 0.4s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0B0F19; }
+    ::-webkit-scrollbar-thumb { background: #27354A; border-radius: 4px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans select-none overflow-x-hidden">
+
+  <!-- HEADER OFICIAL / MARQUESINA DE PANTALLA -->
+  <header class="bg-gradient-to-r from-red-950 via-brand-dark to-brand-card border-b border-brand-border px-6 py-3 flex items-center justify-between shadow-2xl">
+    <div class="flex items-center space-x-4">
+      <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center font-display text-3xl font-extrabold text-white shadow-lg border border-red-400">
+        49
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="text-xs uppercase tracking-widest font-bold text-red-400">Bolerama Coyoacán</span>
+          <span class="text-xs text-gray-400">• En Vivo</span>
+        </div>
+        <h1 class="text-2xl font-display font-bold tracking-wider text-white uppercase">Torneo 49 Aniversario 2026</h1>
+      </div>
+    </div>
+
+    <!-- Indicadores Centrales: Vista activa y Progreso del Carrusel (2 Min) -->
+    <div class="hidden md:flex items-center space-x-6 bg-brand-card/80 border border-brand-border px-5 py-2 rounded-2xl">
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="currentViewBadge" class="text-sm font-bold text-white uppercase tracking-wider">CUARTETAS (EQUIPOS)</span>
+      </div>
+      <div class="h-4 w-px bg-brand-border"></div>
+      <div class="flex items-center space-x-3 text-xs text-gray-300">
+        <span>Rotación en:</span>
+        <span id="carouselTimer" class="font-mono font-bold text-amber-400 text-sm">02:00</span>
+        <div class="w-24 bg-gray-800 rounded-full h-2 overflow-hidden border border-gray-700">
+          <div id="carouselProgressBar" class="bg-red-500 h-full transition-all duration-1000 ease-linear" style="width: 100%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones de Cabecera: Pausar, Refrescar y Abrir Captura -->
+    <div class="flex items-center space-x-3">
+      <button id="btnPauseCarousel" title="Pausar / Reanudar Rotación" class="bg-brand-card hover:bg-gray-800 border border-brand-border p-2.5 rounded-xl text-gray-300 hover:text-white transition">
+        <svg id="iconPause" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </button>
+
+      <button id="btnManualRefresh" title="Actualizar Datos" class="bg-brand-card hover:bg-gray-800 border border-brand-border px-4 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2 text-gray-200 hover:text-white transition">
+        <svg id="refreshSpinner" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        <span class="hidden sm:inline">Refrescar</span>
+      </button>
+
+      <button id="btnOpenCapture" class="bg-red-600 hover:bg-red-700 text-white font-bold text-sm px-4 py-2 rounded-xl shadow-lg shadow-red-900/40 border border-red-500 flex items-center space-x-2 transition transform active:scale-95">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        <span>Captura Mesa</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- BANNER DE ALERTA: JUEGO PERFECTO (300) [Se muestra solo si existe alguno] -->
+  <div id="perfectGameAlert" class="hidden bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-black py-2.5 px-6 font-display font-extrabold tracking-wider text-center text-lg shadow-xl uppercase animate-bounce">
+    ⚡ ¡HISTÓRICO! JUEGO PERFECTO 300 REGISTRADO POR <span id="perfectGamePlayer" class="underline"></span> (<span id="perfectGameTeam"></span>) EN <span id="perfectGameLine"></span> ⚡
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="flex-1 p-6 flex flex-col space-y-6 max-w-[1800px] w-full mx-auto">
+
+    <!-- KPI CARDS (PREMIOS Y ESTADÍSTICAS) -->
+    <section class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <!-- KPI 1: Promedio General -->
+      <div class="bg-brand-card border border-brand-border rounded-2xl p-4 shadow-lg flex flex-col justify-between">
+        <span class="text-xs uppercase tracking-wider font-semibold text-gray-400">Promedio General Liga</span>
+        <div class="mt-2 flex items-baseline space-x-2">
+          <span id="kpiPromedioGeneral" class="text-3xl font-display font-bold text-white">0.0</span>
+          <span class="text-xs text-gray-400">pinos / juego</span>
+        </div>
+        <div class="mt-2 text-[11px] text-gray-400 flex justify-between border-t border-brand-border/60 pt-2">
+          <span>Total Pinos: <strong id="kpiTotalPinos" class="text-gray-200">0</strong></span>
+          <span>Líneas: <strong id="kpiTotalLineas" class="text-gray-200">0</strong></span>
+        </div>
+      </div>
+
+      <!-- KPI 2: Tiro Mayor Cuartetas -->
+      <div class="bg-brand-card border border-brand-border rounded-2xl p-4 shadow-lg flex flex-col justify-between">
+        <span class="text-xs uppercase tracking-wider font-semibold text-red-400">Tiro Mayor Equipo</span>
+        <div class="mt-2">
+          <span id="kpiTiroMayorEqScore" class="text-3xl font-display font-bold text-white">0</span>
+          <p id="kpiTiroMayorEqName" class="text-xs font-medium text-gray-300 truncate mt-1">-</p>
+        </div>
+        <div class="mt-2 text-[11px] text-gray-400 border-t border-brand-border/60 pt-2">
+          Líder con Handicap
+        </div>
+      </div>
+
+      <!-- KPI 3: Serie Mayor Cuartetas -->
+      <div class="bg-brand-card border border-brand-border rounded-2xl p-4 shadow-lg flex flex-col justify-between">
+        <span class="text-xs uppercase tracking-wider font-semibold text-red-400">Serie Mayor Equipo</span>
+        <div class="mt-2">
+          <span id="kpiSerieMayorEqScore" class="text-3xl font-display font-bold text-white">0</span>
+          <p id="kpiSerieMayorEqName" class="text-xs font-medium text-gray-300 truncate mt-1">-</p>
+        </div>
+        <div class="mt-2 text-[11px] text-gray-400 border-t border-brand-border/60 pt-2">
+          Serie acumulada de jornada
+        </div>
+      </div>
+
+      <!-- KPI 4: Tiro Mayor Individual (Cat 1 / Cat 2) -->
+      <div class="bg-brand-card border border-brand-border rounded-2xl p-4 shadow-lg flex flex-col justify-between">
+        <span class="text-xs uppercase tracking-wider font-semibold text-amber-400">Tiro Mayor Individual</span>
+        <div class="mt-2">
+          <span id="kpiTiroMayorIndScore" class="text-3xl font-display font-bold text-white">0</span>
+          <p id="kpiTiroMayorIndName" class="text-xs font-medium text-gray-300 truncate mt-1">-</p>
+        </div>
+        <div class="mt-2 text-[11px] text-gray-400 border-t border-brand-border/60 pt-2">
+          Puntaje con Handicap
+        </div>
+      </div>
+
+      <!-- KPI 5: Serie Mayor Individual -->
+      <div class="bg-brand-card border border-brand-border rounded-2xl p-4 shadow-lg flex flex-col justify-between col-span-2 lg:col-span-1">
+        <span class="text-xs uppercase tracking-wider font-semibold text-amber-400">Serie Mayor Individual</span>
+        <div class="mt-2">
+          <span id="kpiSerieMayorIndScore" class="text-3xl font-display font-bold text-white">0</span>
+          <p id="kpiSerieMayorIndName" class="text-xs font-medium text-gray-300 truncate mt-1">-</p>
+        </div>
+        <div class="mt-2 text-[11px] text-gray-400 border-t border-brand-border/60 pt-2">
+          4 líneas c/Handicap
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVEGACIÓN MANUAL DE PANTALLAS (TABS) -->
+    <div class="flex items-center space-x-2 border-b border-brand-border pb-3">
+      <button onclick="switchView('equipos')" id="tabEquipos" class="px-5 py-2.5 rounded-xl font-display font-bold tracking-wider uppercase text-sm transition bg-red-600 text-white shadow-lg">
+        1. Clasificación Cuartetas
+      </button>
+      <button onclick="switchView('cat1')" id="tabCat1" class="px-5 py-2.5 rounded-xl font-display font-bold tracking-wider uppercase text-sm transition bg-brand-card text-gray-400 hover:text-white border border-brand-border">
+        2. Individual Cat 1 (Prom 191-220)
+      </button>
+      <button onclick="switchView('cat2')" id="tabCat2" class="px-5 py-2.5 rounded-xl font-display font-bold tracking-wider uppercase text-sm transition bg-brand-card text-gray-400 hover:text-white border border-brand-border">
+        3. Individual Cat 2 (Prom 160-190)
+      </button>
+    </div>
+
+    <!-- VISTA 1: TABLA CUARTETAS -->
+    <div id="viewEquipos" class="fade-in flex-1 bg-brand-card border border-brand-border rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+      <div class="p-4 bg-brand-card/90 border-b border-brand-border flex justify-between items-center">
+        <div>
+          <h2 class="text-lg font-display font-bold uppercase tracking-wider text-white">Tabla General de Posiciones — Equipos</h2>
+          <p class="text-xs text-gray-400">Top clasificatorio a Finales Baker del Torneo 49 Aniversario</p>
+        </div>
+        <span class="text-xs font-semibold px-3 py-1 bg-red-900/50 border border-red-700/60 text-red-200 rounded-lg">
+          Líneas 1-8 + 2 Juegos Baker
+        </span>
+      </div>
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-[#121926] text-gray-400 uppercase font-mono text-xs border-b border-brand-border">
+            <tr>
+              <th class="py-3 px-4 text-center w-16">Pos</th>
+              <th class="py-3 px-4">No. & Nombre de Cuarteta</th>
+              <th class="py-3 px-4 text-center">Baker 1</th>
+              <th class="py-3 px-4 text-center">Baker 2</th>
+              <th class="py-3 px-4 text-right">Scratch Vie</th>
+              <th class="py-3 px-4 text-right">Scratch Sáb</th>
+              <th class="py-3 px-4 text-right">Gran Total Scratch</th>
+              <th class="py-3 px-6 text-right text-amber-400 font-bold bg-amber-500/10">Gran Total c/HDCP</th>
+              <th class="py-3 px-4 text-center">Dif. Líder</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyEquipos" class="divide-y divide-brand-border/50 font-medium">
+            <!-- Render dinámico -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- VISTA 2: TABLA INDIVIDUAL CAT 1 -->
+    <div id="viewCat1" class="fade-in hidden flex-1 bg-brand-card border border-brand-border rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+      <div class="p-4 bg-brand-card/90 border-b border-brand-border flex justify-between items-center">
+        <div>
+          <h2 class="text-lg font-display font-bold uppercase tracking-wider text-white">Clasificación Individual — Categoría 1</h2>
+          <p class="text-xs text-gray-400">Promedios de 191 a 220 • Clasificación Top 32</p>
+        </div>
+      </div>
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-[#121926] text-gray-400 uppercase font-mono text-xs border-b border-brand-border">
+            <tr>
+              <th class="py-3 px-4 text-center w-16">Pos</th>
+              <th class="py-3 px-4">Jugador</th>
+              <th class="py-3 px-4">Equipo</th>
+              <th class="py-3 px-4 text-center">HDCP</th>
+              <th class="py-3 px-4 text-right">Subtotal Vie</th>
+              <th class="py-3 px-4 text-right">Subtotal Sáb</th>
+              <th class="py-3 px-4 text-right">Total Scratch</th>
+              <th class="py-3 px-4 text-center">Promedio</th>
+              <th class="py-3 px-6 text-right text-amber-400 font-bold bg-amber-500/10">Total c/HDCP</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyCat1" class="divide-y divide-brand-border/50 font-medium">
+            <!-- Render dinámico -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- VISTA 3: TABLA INDIVIDUAL CAT 2 -->
+    <div id="viewCat2" class="fade-in hidden flex-1 bg-brand-card border border-brand-border rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+      <div class="p-4 bg-brand-card/90 border-b border-brand-border flex justify-between items-center">
+        <div>
+          <h2 class="text-lg font-display font-bold uppercase tracking-wider text-white">Clasificación Individual — Categoría 2</h2>
+          <p class="text-xs text-gray-400">Promedios de 160 a 190 • Clasificación Top 32</p>
+        </div>
+      </div>
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-[#121926] text-gray-400 uppercase font-mono text-xs border-b border-brand-border">
+            <tr>
+              <th class="py-3 px-4 text-center w-16">Pos</th>
+              <th class="py-3 px-4">Jugador</th>
+              <th class="py-3 px-4">Equipo</th>
+              <th class="py-3 px-4 text-center">HDCP</th>
+              <th class="py-3 px-4 text-right">Subtotal Vie</th>
+              <th class="py-3 px-4 text-right">Subtotal Sáb</th>
+              <th class="py-3 px-4 text-right">Total Scratch</th>
+              <th class="py-3 px-4 text-center">Promedio</th>
+              <th class="py-3 px-6 text-right text-amber-400 font-bold bg-amber-500/10">Total c/HDCP</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyCat2" class="divide-y divide-brand-border/50 font-medium">
+            <!-- Render dinámico -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL / APP MÓVIL DE CAPTURA PRIVADA (PROTEGIDA CON PIN) -->
+  <div id="modalCapture" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-brand-card border border-brand-border rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col max-h-[92vh] overflow-y-auto">
+      
+      <div class="flex justify-between items-center border-b border-brand-border pb-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center font-bold text-white">
+            ✍️
+          </div>
+          <div>
+            <h3 class="text-lg font-display font-bold uppercase text-white tracking-wider">Captura Rápida en Pistas</h3>
+            <p class="text-xs text-gray-400">Ingreso directo a Google Sheets</p>
+          </div>
+        </div>
+        <button id="btnCloseCapture" class="text-gray-400 hover:text-white p-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <form id="formCapture" class="mt-5 space-y-4">
+        <!-- PIN de Seguridad -->
+        <div>
+          <label class="block text-xs uppercase tracking-wider font-semibold text-gray-300 mb-1">PIN de Mesa de Control</label>
+          <input type="password" id="inputPin" required value="4949" class="w-full bg-[#0E1420] border border-brand-border rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-red-500 text-center tracking-widest text-lg">
+        </div>
+
+        <!-- Selector de Equipo -->
+        <div>
+          <label class="block text-xs uppercase tracking-wider font-semibold text-gray-300 mb-1">Seleccionar Cuarteta / Equipo</label>
+          <select id="selectEquipo" required class="w-full bg-[#0E1420] border border-brand-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-red-500">
+            <!-- Opciones cargadas dinámicamente -->
+          </select>
+        </div>
+
+        <!-- Sesión y Tipo -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-semibold text-gray-300 mb-1">Sesión</label>
+            <select id="selectSesion" class="w-full bg-[#0E1420] border border-brand-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+              <option value="VIERNES">Viernes 30 Oct</option>
+              <option value="SABADO">Sábado 31 Oct</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-semibold text-gray-300 mb-1">Tipo de Entrada</label>
+            <select id="selectTipo" class="w-full bg-[#0E1420] border border-brand-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+              <option value="LINEA">Línea Regular (4 Jugadores)</option>
+              <option value="BAKER">Línea Baker (Equipo)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Selector de Número de Línea (Para Regular) -->
+        <div id="containerNumLinea">
+          <label class="block text-xs uppercase tracking-wider font-semibold text-gray-300 mb-1">Número de Línea</label>
+          <select id="selectNumLinea" class="w-full bg-[#0E1420] border border-brand-border rounded-xl px-4 py-2 text-white focus:outline-none focus:border-red-500">
+            <option value="1">Línea 1 (Viernes)</option>
+            <option value="2">Línea 2 (Viernes)</option>
+            <option value="3">Línea 3 (Viernes)</option>
+            <option value="4">Línea 4 (Viernes)</option>
+            <option value="5">Línea 5 (Sábado)</option>
+            <option value="6">Línea 6 (Sábado)</option>
+            <option value="7">Línea 7 (Sábado)</option>
+            <option value="8">Línea 8 (Sábado)</option>
+          </select>
+        </div>
+
+        <!-- Inputs de los 4 Jugadores -->
+        <div id="containerJugadores" class="space-y-3 border-t border-brand-border/60 pt-3">
+          <p class="text-xs text-gray-400 font-semibold uppercase">Puntuaciones Jugadores (0 - 300)</p>
+          <div id="inputsJugadoresList" class="space-y-2">
+            <!-- 4 inputs generados dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Input para Línea Baker -->
+        <div id="containerBakerInput" class="hidden border-t border-brand-border/60 pt-3">
+          <label class="block text-xs uppercase tracking-wider font-semibold text-gray-300 mb-1">Puntuación Línea Baker (0 - 300)</label>
+          <input type="number" id="inputBakerScore" min="0" max="300" placeholder="Ej. 195" class="w-full bg-[#0E1420] border border-brand-border rounded-xl px-4 py-3 text-2xl font-bold font-mono text-center text-amber-400 focus:outline-none focus:border-red-500">
+        </div>
+
+        <!-- Mensaje de Estado / Feedback -->
+        <div id="captureFeedback" class="hidden text-center text-xs py-2 px-3 rounded-xl font-semibold"></div>
+
+        <!-- Botones de Acción -->
+        <div class="pt-3 flex space-x-3">
+          <button type="submit" id="btnSubmitCapture" class="flex-1 bg-red-600 hover:bg-red-700 font-bold py-3 px-4 rounded-xl text-white shadow-lg shadow-red-900/40 border border-red-500 transition">
+            Guardar y Sincronizar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPT PRINCIPAL -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -154,8 +154,7 @@ function renderTableEquipos() {
     const isQualifying = idx < 16; // Zona de clasificación a Finales Baker
     const diff = topLeaderScore > 0 ? (topLeaderScore - eq.granTotHdcp) : 0;
 
-    // Sumar hándicaps de jugadores para obtener el hándicap total por línea de la cuarteta
-    const hdcpEquipo = eq.jugadores ? eq.jugadores.reduce((sum, j) => sum + (j.hdcp || 0), 0) : 0;
+    const hdcpEquipo = eq.hdcpEquipo || (eq.jugadores ? eq.jugadores.reduce((sum, j) => sum + (j.hdcp || 0), 0) : 0);
 
     const row = document.createElement('tr');
     row.className = `hover:bg-brand-border/40 transition ${isQualifying ? 'bg-red-950/10' : ''}`;
@@ -254,7 +253,6 @@ function initCarousel() {
       switchView(views[currentViewIndex]);
       carouselTimer = CAROUSEL_INTERVAL_SEC;
       progressBar.style.width = '100%';
-      // Cada rotación completa se sincronizan los datos en segundo plano
       if (currentViewIndex === 0) fetchTournamentData();
     }
   }, 1000);
@@ -304,12 +302,7 @@ function initCaptureModal() {
   document.getElementById('btnCloseCapture').addEventListener('click', () => modal.classList.add('hidden'));
 
   const selectTipo = document.getElementById('selectTipo');
-  selectTipo.addEventListener('change', () => {
-    const isBaker = selectTipo.value === 'BAKER';
-    document.getElementById('containerNumLinea').classList.toggle('hidden', isBaker);
-    document.getElementById('containerJugadores').classList.toggle('hidden', isBaker);
-    document.getElementById('containerBakerInput').classList.toggle('hidden', !isBaker);
-  });
+  selectTipo.addEventListener('change', toggleCaptureFormType);
 
   document.getElementById('selectEquipo').addEventListener('change', renderCapturePlayerInputs);
 
@@ -317,6 +310,30 @@ function initCaptureModal() {
     e.preventDefault();
     await submitScoreCapture();
   });
+}
+
+function toggleCaptureFormType() {
+  const isBaker = document.getElementById('selectTipo').value === 'BAKER';
+  document.getElementById('containerNumLinea').classList.toggle('hidden', isBaker);
+  document.getElementById('containerJugadores').classList.toggle('hidden', isBaker);
+  document.getElementById('containerBakerInput').classList.toggle('hidden', !isBaker);
+
+  // CORRECCIÓN CLAVE: Activar o desactivar el atributo "required" dinámicamente
+  const playerInputs = document.querySelectorAll('.inputScoreJugador');
+  playerInputs.forEach(inp => {
+    if (isBaker) {
+      inp.removeAttribute('required');
+    } else {
+      inp.setAttribute('required', 'true');
+    }
+  });
+
+  const bakerInput = document.getElementById('inputBakerScore');
+  if (isBaker) {
+    bakerInput.setAttribute('required', 'true');
+  } else {
+    bakerInput.removeAttribute('required');
+  }
 }
 
 function populateCaptureSelects() {
@@ -344,6 +361,8 @@ function renderCapturePlayerInputs() {
 
   if (!eq || !eq.jugadores) return;
 
+  const isBaker = document.getElementById('selectTipo').value === 'BAKER';
+
   eq.jugadores.forEach((j, idx) => {
     const div = document.createElement('div');
     div.className = 'flex items-center justify-between bg-[#0E1420] border border-brand-border p-2.5 rounded-xl';
@@ -352,7 +371,7 @@ function renderCapturePlayerInputs() {
         <p class="text-sm font-semibold text-white truncate">${j.nombreJugador}</p>
         <span class="text-[10px] text-gray-400">HDCP: ${j.hdcp} | ${j.categoria}</span>
       </div>
-      <input type="number" min="0" max="300" required placeholder="0" data-player-idx="${idx}" class="inputScoreJugador w-20 bg-brand-card border border-brand-border rounded-lg px-2 py-1.5 text-center text-white font-mono font-bold text-lg focus:outline-none focus:border-red-500">
+      <input type="number" min="0" max="300" ${isBaker ? '' : 'required'} placeholder="0" data-player-idx="${idx}" class="inputScoreJugador w-20 bg-brand-card border border-brand-border rounded-lg px-2 py-1.5 text-center text-white font-mono font-bold text-lg focus:outline-none focus:border-red-500">
     `;
     container.appendChild(div);
   });

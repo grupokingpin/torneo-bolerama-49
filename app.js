@@ -154,6 +154,9 @@ function renderTableEquipos() {
     const isQualifying = idx < 16; // Zona de clasificación a Finales Baker
     const diff = topLeaderScore > 0 ? (topLeaderScore - eq.granTotHdcp) : 0;
 
+    // Sumar hándicaps de jugadores para obtener el hándicap total por línea de la cuarteta
+    const hdcpEquipo = eq.jugadores ? eq.jugadores.reduce((sum, j) => sum + (j.hdcp || 0), 0) : 0;
+
     const row = document.createElement('tr');
     row.className = `hover:bg-brand-border/40 transition ${isQualifying ? 'bg-red-950/10' : ''}`;
     row.innerHTML = `
@@ -166,6 +169,7 @@ function renderTableEquipos() {
           <span>${eq.nombreEquipo}</span>
         </div>
       </td>
+      <td class="py-3 px-4 text-center font-mono text-amber-300 font-semibold">+${hdcpEquipo}</td>
       <td class="py-3 px-4 text-center font-mono text-gray-300">${eq.bakerVie || '-'}</td>
       <td class="py-3 px-4 text-center font-mono text-gray-300">${eq.bakerSab || '-'}</td>
       <td class="py-3 px-4 text-right font-mono text-gray-400">${Number(eq.scratchVie || 0).toLocaleString()}</td>

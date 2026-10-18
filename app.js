@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 ANIVERSARIO 2026
- * TV Display & Data Engine (Alto Contraste)
+ * TV Display & Data Engine (Alto Contraste y Robusto)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -22,8 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initCarousel();
   initCaptureModal();
 
-  document.getElementById('btnManualRefresh').addEventListener('click', () => fetchTournamentData(true));
-  document.getElementById('btnPauseCarousel').addEventListener('click', togglePauseCarousel);
+  const refreshBtn = document.getElementById('btnManualRefresh');
+  if (refreshBtn) refreshBtn.addEventListener('click', () => fetchTournamentData(true));
+  
+  const pauseBtn = document.getElementById('btnPauseCarousel');
+  if (pauseBtn) pauseBtn.addEventListener('click', togglePauseCarousel);
 
   const detailSelect = document.getElementById('selectDetailEquipo');
   if (detailSelect) detailSelect.addEventListener('change', renderEquipoDetailContent);
@@ -40,70 +43,86 @@ async function fetchTournamentData(manual = false) {
       populateDetailSelect();
     }
   } catch (err) {
-    console.error('Error al conectar:', err);
+    console.error('Error al conectar con Google Sheets:', err);
   }
 }
 
 function renderAll() {
-  renderKPIs();
-  renderPerfectGameAlert();
-  renderTableEquipos();
-  renderTableCat1();
-  renderTableCat2();
-  renderPremiosGrid();
-  renderEquipoDetailContent();
+  try { renderKPIs(); } catch(e) { console.error('Error KPI:', e); }
+  try { renderPerfectGameAlert(); } catch(e) { console.error('Error Alert:', e); }
+  try { renderTableEquipos(); } catch(e) { console.error('Error Equipos:', e); }
+  try { renderTableCat1(); } catch(e) { console.error('Error Cat1:', e); }
+  try { renderTableCat2(); } catch(e) { console.error('Error Cat2:', e); }
+  try { renderPremiosGrid(); } catch(e) { console.error('Error Premios:', e); }
+  try { renderEquipoDetailContent(); } catch(e) { console.error('Error Detail:', e); }
 }
 
 function renderKPIs() {
   const stats = tournamentData.stats || {};
   const premios = tournamentData.premios || {};
 
-  document.getElementById('kpiPromedioGeneral').innerText = stats.promedioGeneral || '0.0';
-  document.getElementById('kpiTotalPinos').innerText = Number(stats.totalPinos || 0).toLocaleString();
+  const elemProm = document.getElementById('kpiPromedioGeneral');
+  if (elemProm) elemProm.innerText = stats.promedioGeneral || '0.0';
+
+  const elemPinos = document.getElementById('kpiTotalPinos');
+  if (elemPinos) elemPinos.innerText = Number(stats.totalPinos || 0).toLocaleString();
 
   const tiroEq = premios.tiroMayorEquipoVie || { maxTiroVieHdcp: 0, nombreEquipo: '-' };
-  document.getElementById('kpiTiroMayorEqScore').innerText = tiroEq.maxTiroVieHdcp;
-  document.getElementById('kpiTiroMayorEqName').innerText = tiroEq.nombreEquipo;
+  const elemTiroEqScore = document.getElementById('kpiTiroMayorEqScore');
+  if (elemTiroEqScore) elemTiroEqScore.innerText = tiroEq.maxTiroVieHdcp || 0;
+  const elemTiroEqName = document.getElementById('kpiTiroMayorEqName');
+  if (elemTiroEqName) elemTiroEqName.innerText = tiroEq.nombreEquipo || '-';
 
   const serieEq = premios.serieMayorEquipoVie || { serieVieHdcp: 0, nombreEquipo: '-' };
-  document.getElementById('kpiSerieMayorEqScore').innerText = serieEq.serieVieHdcp;
-  document.getElementById('kpiSerieMayorEqName').innerText = serieEq.nombreEquipo;
+  const elemSerieEqScore = document.getElementById('kpiSerieMayorEqScore');
+  if (elemSerieEqScore) elemSerieEqScore.innerText = serieEq.serieVieHdcp || 0;
+  const elemSerieEqName = document.getElementById('kpiSerieMayorEqName');
+  if (elemSerieEqName) elemSerieEqName.innerText = serieEq.nombreEquipo || '-';
 
   const tiroInd = premios.tiroMayorIndVie || { maxTiroVieHdcp: 0, nombreJugador: '-' };
-  document.getElementById('kpiTiroMayorIndScore').innerText = tiroInd.maxTiroVieHdcp;
-  document.getElementById('kpiTiroMayorIndName').innerText = tiroInd.nombreJugador;
+  const elemTiroIndScore = document.getElementById('kpiTiroMayorIndScore');
+  if (elemTiroIndScore) elemTiroIndScore.innerText = tiroInd.maxTiroVieHdcp || 0;
+  const elemTiroIndName = document.getElementById('kpiTiroMayorIndName');
+  if (elemTiroIndName) elemTiroIndName.innerText = tiroInd.nombreJugador || '-';
 
   const serieInd = premios.serieMayorIndVie || { serieVieHdcp: 0, nombreJugador: '-' };
-  document.getElementById('kpiSerieMayorIndScore').innerText = serieInd.serieVieHdcp;
-  document.getElementById('kpiSerieMayorIndName').innerText = serieInd.nombreJugador;
+  const elemSerieIndScore = document.getElementById('kpiSerieMayorIndScore');
+  if (elemSerieIndScore) elemSerieIndScore.innerText = serieInd.serieVieHdcp || 0;
+  const elemSerieIndName = document.getElementById('kpiSerieMayorIndName');
+  if (elemSerieIndName) elemSerieIndName.innerText = serieInd.nombreJugador || '-';
 }
 
 function renderPerfectGameAlert() {
   const alertBox = document.getElementById('perfectGameAlert');
+  if (!alertBox) return;
   if (tournamentData.perfectGames && tournamentData.perfectGames.length > 0) {
     const pg = tournamentData.perfectGames[0];
-    document.getElementById('perfectGamePlayer').innerText = pg.jugador;
-    document.getElementById('perfectGameTeam').innerText = pg.equipo;
-    document.getElementById('perfectGameLine').innerText = `${pg.linea} (${pg.dia})`;
+    const elemP = document.getElementById('perfectGamePlayer');
+    if (elemP) elemP.innerText = pg.jugador;
+    const elemT = document.getElementById('perfectGameTeam');
+    if (elemT) elemT.innerText = pg.equipo;
+    const elemL = document.getElementById('perfectGameLine');
+    if (elemL) elemL.innerText = `${pg.linea} (${pg.dia})`;
     alertBox.classList.remove('hidden');
   } else {
     alertBox.classList.add('hidden');
   }
 }
 
-/* RENDER TV CUARTETAS (LETRAS GIGANTES Y MÁXIMO CONTRASTE) */
+/* RENDER TV CUARTETAS (LETRAS GIGANTES) */
 function renderTableEquipos() {
   const tbody = document.getElementById('tbodyEquipos');
+  if (!tbody) return;
   tbody.innerHTML = '';
   const equipos = tournamentData.equipos || [];
 
-  equipos.slice(0, 8).forEach((eq, idx) => {
+  equipos.forEach((eq, idx) => {
     let estado = idx === 0 ? '🏆 Sembrado #1' : idx === 1 ? '⭐ Sembrado #2' : '⚡ Clasificado';
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white text-xl font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     row.innerHTML = `
-      <td class="py-4 px-3 text-center font-black font-mono text-2xl text-amber-400">${eq.posicion}</td>
-      <td class="py-4 px-3 font-extrabold text-2xl text-white">${eq.nombreEquipo}</td>
+      <td class="py-4 px-3 text-center font-black font-mono text-2xl text-amber-400">${eq.posicion || (idx + 1)}</td>
+      <td class="py-4 px-3 font-extrabold text-2xl text-white">${eq.nombreEquipo || '-'}</td>
       <td class="py-4 px-2 text-center font-mono text-amber-300 font-black">+${eq.hdcpEquipo || 0}</td>
       <td class="py-4 px-2 text-center font-mono text-amber-400 font-black">+${eq.hdcpBaker || 0}</td>
       <td class="py-4 px-2 text-center font-mono text-gray-200">${eq.bakerVie || '-'}</td>
@@ -118,19 +137,20 @@ function renderTableEquipos() {
   });
 }
 
-/* RENDER TV CAT 1 (LETRAS GIGANTES Y MÁXIMO CONTRASTE) */
+/* RENDER TV CAT 1 */
 function renderTableCat1() {
   const tbody = document.getElementById('tbodyCat1');
+  if (!tbody) return;
   tbody.innerHTML = '';
-  (tournamentData.cat1 || []).slice(0, 8).forEach(j => {
+  (tournamentData.cat1 || []).forEach((j, idx) => {
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white text-xl font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     row.innerHTML = `
-      <td class="py-4 px-3 text-center font-black font-mono text-2xl text-amber-400">${j.posicion}</td>
-      <td class="py-4 px-3 font-extrabold text-2xl text-white">${j.nombreJugador}</td>
-      <td class="py-4 px-3 text-base text-gray-300 font-semibold">${j.nombreEquipo}</td>
-      <td class="py-4 px-2 text-center font-mono text-emerald-400 font-black">${j.promedioTorneo}</td>
-      <td class="py-4 px-2 text-center font-mono text-amber-300 font-black">+${j.hdcp}</td>
+      <td class="py-4 px-3 text-center font-black font-mono text-2xl text-amber-400">${j.posicion || (idx + 1)}</td>
+      <td class="py-4 px-3 font-extrabold text-2xl text-white">${j.nombreJugador || '-'}</td>
+      <td class="py-4 px-3 text-base text-gray-300 font-semibold">${j.nombreEquipo || '-'}</td>
+      <td class="py-4 px-2 text-center font-mono text-emerald-400 font-black">${j.promedioTorneo || '0'}</td>
+      <td class="py-4 px-2 text-center font-mono text-amber-300 font-black">+${j.hdcp || 0}</td>
       <td class="py-4 px-3 text-right font-mono text-gray-300">${j.totScratch || 0}</td>
       <td class="py-4 px-4 text-right font-mono font-black text-amber-400 text-3xl bg-amber-500/10">${j.totHdcp || 0}</td>
     `;
@@ -138,19 +158,20 @@ function renderTableCat1() {
   });
 }
 
-/* RENDER TV CAT 2 (LETRAS GIGANTES Y MÁXIMO CONTRASTE) */
+/* RENDER TV CAT 2 */
 function renderTableCat2() {
   const tbody = document.getElementById('tbodyCat2');
+  if (!tbody) return;
   tbody.innerHTML = '';
-  (tournamentData.cat2 || []).forEach(j => {
+  (tournamentData.cat2 || []).forEach((j, idx) => {
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white text-xl font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     row.innerHTML = `
-      <td class="py-4 px-3 text-center font-black font-mono text-2xl text-amber-400">${j.posicion}</td>
-      <td class="py-4 px-3 font-extrabold text-2xl text-white">${j.nombreJugador}</td>
-      <td class="py-4 px-3 text-base text-gray-300 font-semibold">${j.nombreEquipo}</td>
-      <td class="py-4 px-2 text-center font-mono text-emerald-400 font-black">${j.promedioTorneo}</td>
-      <td class="py-4 px-2 text-center font-mono text-amber-300 font-black">+${j.hdcp}</td>
+      <td class="py-4 px-3 text-center font-black font-mono text-2xl text-amber-400">${j.posicion || (idx + 1)}</td>
+      <td class="py-4 px-3 font-extrabold text-2xl text-white">${j.nombreJugador || '-'}</td>
+      <td class="py-4 px-3 text-base text-gray-300 font-semibold">${j.nombreEquipo || '-'}</td>
+      <td class="py-4 px-2 text-center font-mono text-emerald-400 font-black">${j.promedioTorneo || '0'}</td>
+      <td class="py-4 px-2 text-center font-mono text-amber-300 font-black">+${j.hdcp || 0}</td>
       <td class="py-4 px-3 text-right font-mono text-gray-300">${j.totScratch || 0}</td>
       <td class="py-4 px-4 text-right font-mono font-black text-amber-400 text-3xl bg-amber-500/10">${j.totHdcp || 0}</td>
     `;
@@ -242,13 +263,13 @@ function initCarousel() {
   setInterval(() => {
     if (isPaused) return;
     carouselTimer--;
-    progressBar.style.width = `${(carouselTimer / CAROUSEL_INTERVAL_SEC) * 100}%`;
-    timerElem.innerText = `00:${carouselTimer.toString().padStart(2, '0')}`;
+    if (progressBar) progressBar.style.width = `${(carouselTimer / CAROUSEL_INTERVAL_SEC) * 100}%`;
+    if (timerElem) timerElem.innerText = `00:${carouselTimer.toString().padStart(2, '0')}`;
     if (carouselTimer <= 0) {
       currentViewIndex = (currentViewIndex + 1) % views.length;
       switchView(views[currentViewIndex]);
       carouselTimer = CAROUSEL_INTERVAL_SEC;
-      progressBar.style.width = '100%';
+      if (progressBar) progressBar.style.width = '100%';
       if (currentViewIndex === 0) fetchTournamentData();
     }
   }, 1000);
@@ -271,7 +292,7 @@ function switchView(viewName) {
   });
 
   const titles = { equipos: 'CUARTETAS (EQUIPOS)', cat1: 'INDIVIDUAL CATEGORÍA 1', cat2: 'INDIVIDUAL CATEGORÍA 2', premios: 'PREMIOS ESPECIALES', equipoDetail: 'FICHA POR EQUIPO' };
-  currentViewBadge.innerText = titles[viewName] || viewName.toUpperCase();
+  if (currentViewBadge) currentViewBadge.innerText = titles[viewName] || viewName.toUpperCase();
 }
 
 function togglePauseCarousel() {
@@ -284,29 +305,43 @@ function capitalize(s) {
 
 function initCaptureModal() {
   const modal = document.getElementById('modalCapture');
-  document.getElementById('btnOpenCapture').addEventListener('click', () => modal.classList.remove('hidden'));
-  document.getElementById('btnCloseCapture').addEventListener('click', () => modal.classList.add('hidden'));
+  const btnOpen = document.getElementById('btnOpenCapture');
+  const btnClose = document.getElementById('btnCloseCapture');
+  
+  if (btnOpen && modal) btnOpen.addEventListener('click', () => modal.classList.remove('hidden'));
+  if (btnClose && modal) btnClose.addEventListener('click', () => modal.classList.add('hidden'));
 
   const selectTipo = document.getElementById('selectTipo');
-  selectTipo.addEventListener('change', toggleCaptureFormType);
-  document.getElementById('selectEquipo').addEventListener('change', renderCapturePlayerInputs);
+  if (selectTipo) selectTipo.addEventListener('change', toggleCaptureFormType);
+  
+  const selectEq = document.getElementById('selectEquipo');
+  if (selectEq) selectEq.addEventListener('change', renderCapturePlayerInputs);
 
-  document.getElementById('formCapture').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    await submitScoreCapture();
-  });
+  const formCap = document.getElementById('formCapture');
+  if (formCap) {
+    formCap.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await submitScoreCapture();
+    });
+  }
 }
 
 function toggleCaptureFormType() {
   const isBaker = document.getElementById('selectTipo').value === 'BAKER';
-  document.getElementById('containerNumLinea').classList.toggle('hidden', isBaker);
-  document.getElementById('containerJugadores').classList.toggle('hidden', isBaker);
-  document.getElementById('containerBakerInput').classList.toggle('hidden', !isBaker);
+  const cLinea = document.getElementById('containerNumLinea');
+  if (cLinea) cLinea.classList.toggle('hidden', isBaker);
+  
+  const cJug = document.getElementById('containerJugadores');
+  if (cJug) cJug.classList.toggle('hidden', isBaker);
+  
+  const cBaker = document.getElementById('containerBakerInput');
+  if (cBaker) cBaker.classList.toggle('hidden', !isBaker);
 
   const playerInputs = document.querySelectorAll('.inputScoreJugador');
   playerInputs.forEach(inp => isBaker ? inp.removeAttribute('required') : inp.setAttribute('required', 'true'));
+  
   const bakerInput = document.getElementById('inputBakerScore');
-  isBaker ? bakerInput.setAttribute('required', 'true') : bakerInput.removeAttribute('required');
+  if (bakerInput) isBaker ? bakerInput.setAttribute('required', 'true') : bakerInput.removeAttribute('required');
 }
 
 function populateCaptureSelects() {
@@ -325,7 +360,9 @@ function populateCaptureSelects() {
 function renderCapturePlayerInputs() {
   const select = document.getElementById('selectEquipo');
   const container = document.getElementById('inputsJugadoresList');
+  if (!container || !select) return;
   container.innerHTML = '';
+  
   const numEq = Number(select.value);
   const eq = (tournamentData.equipos || []).find(e => e.numEquipo === numEq);
   if (!eq || !eq.jugadores) return;
@@ -348,8 +385,7 @@ function renderCapturePlayerInputs() {
 async function submitScoreCapture() {
   const btn = document.getElementById('btnSubmitCapture');
   const feedback = document.getElementById('captureFeedback');
-  btn.disabled = true;
-  btn.innerText = 'Guardando...';
+  if (btn) { btn.disabled = true; btn.innerText = 'Guardando...'; }
 
   const pin = document.getElementById('inputPin').value;
   const numEquipo = Number(document.getElementById('selectEquipo').value);
@@ -369,25 +405,31 @@ async function submitScoreCapture() {
   try {
     const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
     const result = await res.json();
-    feedback.classList.remove('hidden');
+    if (feedback) feedback.classList.remove('hidden');
     if (result.status === 'success') {
-      feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-emerald-950 text-emerald-300 border border-emerald-600';
-      feedback.innerText = '✓ Guardado correctamente.';
+      if (feedback) {
+        feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-emerald-950 text-emerald-300 border border-emerald-600';
+        feedback.innerText = '✓ Guardado correctamente.';
+      }
       await fetchTournamentData();
       setTimeout(() => {
-        document.getElementById('modalCapture').classList.add('hidden');
-        feedback.classList.add('hidden');
+        const modal = document.getElementById('modalCapture');
+        if (modal) modal.classList.add('hidden');
+        if (feedback) feedback.classList.add('hidden');
       }, 1200);
     } else {
-      feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-red-950 text-red-300 border border-red-600';
-      feedback.innerText = `Error: ${result.message}`;
+      if (feedback) {
+        feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-red-950 text-red-300 border border-red-600';
+        feedback.innerText = `Error: ${result.message}`;
+      }
     }
   } catch (err) {
-    feedback.classList.remove('hidden');
-    feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-red-950 text-red-300 border border-red-600';
-    feedback.innerText = 'Error al comunicar con la base de datos.';
+    if (feedback) {
+      feedback.classList.remove('hidden');
+      feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-red-950 text-red-300 border border-red-600';
+      feedback.innerText = 'Error al comunicar con la base de datos.';
+    }
   } finally {
-    btn.disabled = false;
-    btn.innerText = 'Guardar y Sincronizar';
+    if (btn) { btn.disabled = false; btn.innerText = 'Guardar y Sincronizar'; }
   }
 }

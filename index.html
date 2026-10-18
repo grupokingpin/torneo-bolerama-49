@@ -4,12 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bolerama Coyoacán • Torneo 49 Aniversario 2026</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter & Barlow Condensed -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@600;800;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -20,12 +18,11 @@
           },
           colors: {
             brand: {
-              red: '#B91C1C',
-              darkRed: '#881337',
-              lightBg: '#F8FAFC',
-              cardBg: '#FFFFFF',
-              border: '#E2E8F0',
-              accentGold: '#D97706'
+              red: '#DC2626',
+              bg: '#0A0E17',
+              card: '#131B2E',
+              border: '#2A3854',
+              yellow: '#FACC15'
             }
           }
         }
@@ -33,367 +30,258 @@
     }
   </script>
   <style>
-    body { background-color: #BE123C; color: #0F172A; } /* Fondo Rojo StudioProShop */
-    .fade-in { animation: fadeIn 0.3s ease-in-out; }
+    body { background-color: #0A0E17; color: #FFFFFF; }
+    .fade-in { animation: fadeIn 0.25s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .banner-300-active { animation: pulseBanner 1.5s infinite alternate; }
-    @keyframes pulseBanner { from { opacity: 0.85; transform: scale(0.998); } to { opacity: 1; transform: scale(1); } }
-
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #F1F5F9; }
-    ::-webkit-scrollbar-thumb { background: #94A3B8; border-radius: 4px; }
+    .banner-300-active { animation: pulseBanner 1.2s infinite alternate; }
+    @keyframes pulseBanner { from { opacity: 0.85; } to { opacity: 1; } }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0E17; }
+    ::-webkit-scrollbar-thumb { background: #2A3854; border-radius: 4px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans select-none overflow-x-hidden">
+<body class="min-h-screen flex flex-col font-sans select-none overflow-x-hidden bg-[#0A0E17]">
 
-  <!-- HEADER OFICIAL DE PANTALLA (TEMA CLARO / INSTITUCIONAL) -->
-  <header class="bg-white border-b-4 border-rose-900 px-6 py-3 flex items-center justify-between shadow-xl">
+  <!-- MARQUESINA TV -->
+  <header class="bg-[#131B2E] border-b-2 border-red-600 px-6 py-3 flex items-center justify-between shadow-2xl">
     <div class="flex items-center space-x-4">
-      <div class="w-14 h-14 bg-red-700 rounded-2xl flex items-center justify-center font-display text-4xl font-black text-white shadow-md border border-red-500">
+      <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center font-display text-3xl font-black text-white border border-red-400">
         49
       </div>
       <div>
-        <div class="flex items-center space-x-2">
-          <span class="text-xs uppercase tracking-widest font-black text-red-700">Bolerama Coyoacán</span>
-          <span class="text-xs text-emerald-700 font-extrabold">• EN VIVO</span>
-        </div>
-        <h1 class="text-2xl md:text-3xl font-display font-black tracking-wider text-slate-900 uppercase">Torneo 49 Aniversario 2026</h1>
+        <span class="text-xs uppercase tracking-widest font-black text-red-500">BOLERAMA COYOACÁN • EN VIVO</span>
+        <h1 class="text-2xl font-display font-black tracking-wider text-white uppercase">TORNEO 49 ANIVERSARIO 2026</h1>
       </div>
     </div>
 
-    <!-- Indicadores Centrales: Rotación 30 Segundos -->
-    <div class="hidden lg:flex items-center space-x-6 bg-slate-100 border border-slate-300 px-6 py-2.5 rounded-2xl">
+    <div class="hidden lg:flex items-center space-x-6 bg-[#0A0E17] border border-brand-border px-5 py-2 rounded-xl">
       <div class="flex items-center space-x-2">
-        <span class="w-3.5 h-3.5 rounded-full bg-emerald-600 animate-pulse"></span>
-        <span id="currentViewBadge" class="text-base font-black text-slate-800 uppercase tracking-wider">CUARTETAS (EQUIPOS)</span>
+        <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="currentViewBadge" class="text-sm font-black text-white uppercase tracking-wider">CUARTETAS (EQUIPOS)</span>
       </div>
-      <div class="h-5 w-px bg-slate-300"></div>
-      <div class="flex items-center space-x-3 text-xs text-slate-600">
+      <div class="h-4 w-px bg-brand-border"></div>
+      <div class="flex items-center space-x-3 text-xs text-gray-300">
         <span class="font-bold">Rotación:</span>
-        <span id="carouselTimer" class="font-mono font-black text-red-700 text-base">00:30</span>
-        <div class="w-28 bg-slate-200 rounded-full h-2.5 overflow-hidden border border-slate-300">
+        <span id="carouselTimer" class="font-mono font-black text-amber-400 text-sm">00:30</span>
+        <div class="w-24 bg-gray-800 rounded-full h-2 overflow-hidden border border-gray-700">
           <div id="carouselProgressBar" class="bg-red-600 h-full transition-all duration-1000 ease-linear" style="width: 100%;"></div>
         </div>
       </div>
     </div>
 
-    <!-- Acciones de Cabecera -->
     <div class="flex items-center space-x-3">
-      <button id="btnPauseCarousel" title="Pausar / Reanudar Rotación" class="bg-slate-100 hover:bg-slate-200 border border-slate-300 p-3 rounded-xl text-slate-700 transition">
+      <button id="btnPauseCarousel" class="bg-[#0A0E17] border border-brand-border p-2.5 rounded-xl text-gray-300 hover:text-white">
         <svg id="iconPause" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
       </button>
-
-      <button id="btnManualRefresh" title="Actualizar Datos" class="bg-slate-100 hover:bg-slate-200 border border-slate-300 px-4 py-2.5 rounded-xl text-sm font-bold flex items-center space-x-2 text-slate-800 transition">
-        <svg id="refreshSpinner" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-        <span class="hidden sm:inline">Refrescar</span>
+      <button id="btnManualRefresh" class="bg-[#0A0E17] border border-brand-border px-4 py-2 rounded-xl text-xs font-black text-gray-200">
+        <span>Refrescar</span>
       </button>
-
-      <button id="btnOpenCapture" class="bg-red-700 hover:bg-red-800 text-white font-extrabold text-sm px-4 py-2.5 rounded-xl shadow-md border border-red-600 flex items-center space-x-2 transition transform active:scale-95">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        <span>Captura Mesa</span>
+      <button id="btnOpenCapture" class="bg-red-600 text-white font-black text-xs px-4 py-2 rounded-xl border border-red-500">
+        <span>+ Captura Mesa</span>
       </button>
     </div>
   </header>
 
-  <!-- BANNER ALERTA JUEGO PERFECTO (300) -->
-  <div id="perfectGameAlert" class="hidden banner-300-active bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 text-slate-900 py-3 px-6 font-display font-black tracking-wider text-center text-xl shadow-lg uppercase border-y-2 border-amber-500">
-    ⚡ ¡HISTÓRICO! JUEGO PERFECTO 300 REGISTRADO POR <span id="perfectGamePlayer" class="underline"></span> (<span id="perfectGameTeam"></span>) EN <span id="perfectGameLine"></span> ⚡
+  <!-- BANNER 300 -->
+  <div id="perfectGameAlert" class="hidden banner-300-active bg-amber-400 text-black py-2 px-6 font-display font-black text-center text-lg uppercase">
+    ⚡ ¡JUEGO PERFECTO 300! <span id="perfectGamePlayer" class="underline"></span> (<span id="perfectGameTeam"></span>) EN <span id="perfectGameLine"></span> ⚡
   </div>
 
-  <!-- CONTENEDOR PRINCIPAL TARJETA BLANCA TIPO STUDIOPROSHOP -->
-  <main class="flex-1 p-4 md:p-6 flex flex-col space-y-6 max-w-[1920px] w-full mx-auto">
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="flex-1 p-4 flex flex-col space-y-4 max-w-[1920px] w-full mx-auto">
 
-    <!-- KPI CARDS (TEMA CLARO) -->
-    <section class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-md flex flex-col justify-between">
-        <span class="text-xs uppercase tracking-wider font-extrabold text-slate-500">Promedio General Liga</span>
-        <div class="mt-2 flex items-baseline space-x-2">
-          <span id="kpiPromedioGeneral" class="text-4xl font-display font-black text-slate-900">0.0</span>
-          <span class="text-xs text-slate-500 font-bold">pinos/juego</span>
-        </div>
-        <div class="mt-2 text-[11px] text-slate-500 flex justify-between border-t border-slate-200 pt-2 font-bold">
-          <span>Pinos: <strong id="kpiTotalPinos" class="text-slate-800">0</strong></span>
-          <span>Líneas: <strong id="kpiTotalLineas" class="text-slate-800">0</strong></span>
-        </div>
+    <!-- KPIs TV ALTO CONTRASTE -->
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
+        <span class="text-[11px] uppercase font-black text-gray-400">Promedio Liga</span>
+        <span id="kpiPromedioGeneral" class="text-3xl font-display font-black text-white">0.0</span>
+        <span class="text-[10px] text-gray-400">Pinos: <strong id="kpiTotalPinos" class="text-white">0</strong></span>
       </div>
-
-      <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-md flex flex-col justify-between">
-        <span class="text-xs uppercase tracking-wider font-extrabold text-red-700">Tiro Mayor Equipo</span>
-        <div class="mt-2">
-          <span id="kpiTiroMayorEqScore" class="text-4xl font-display font-black text-slate-900">0</span>
-          <p id="kpiTiroMayorEqName" class="text-xs font-black text-slate-700 truncate mt-1">-</p>
-        </div>
-        <div class="mt-2 text-[11px] text-slate-500 border-t border-slate-200 pt-2 font-bold">Líder c/Handicap</div>
+      <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
+        <span class="text-[11px] uppercase font-black text-red-400">Tiro Mayor Eq</span>
+        <span id="kpiTiroMayorEqScore" class="text-3xl font-display font-black text-white">0</span>
+        <p id="kpiTiroMayorEqName" class="text-[10px] font-black text-amber-400 truncate">-</p>
       </div>
-
-      <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-md flex flex-col justify-between">
-        <span class="text-xs uppercase tracking-wider font-extrabold text-red-700">Serie Mayor Equipo</span>
-        <div class="mt-2">
-          <span id="kpiSerieMayorEqScore" class="text-4xl font-display font-black text-slate-900">0</span>
-          <p id="kpiSerieMayorEqName" class="text-xs font-black text-slate-700 truncate mt-1">-</p>
-        </div>
-        <div class="mt-2 text-[11px] text-slate-500 border-t border-slate-200 pt-2 font-bold">Serie acumulada jornada</div>
+      <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
+        <span class="text-[11px] uppercase font-black text-red-400">Serie Mayor Eq</span>
+        <span id="kpiSerieMayorEqScore" class="text-3xl font-display font-black text-white">0</span>
+        <p id="kpiSerieMayorEqName" class="text-[10px] font-black text-amber-400 truncate">-</p>
       </div>
-
-      <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-md flex flex-col justify-between">
-        <span class="text-xs uppercase tracking-wider font-extrabold text-amber-600">Tiro Mayor Individual</span>
-        <div class="mt-2">
-          <span id="kpiTiroMayorIndScore" class="text-4xl font-display font-black text-slate-900">0</span>
-          <p id="kpiTiroMayorIndName" class="text-xs font-black text-slate-700 truncate mt-1">-</p>
-        </div>
-        <div class="mt-2 text-[11px] text-slate-500 border-t border-slate-200 pt-2 font-bold">Puntaje c/Handicap</div>
+      <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
+        <span class="text-[11px] uppercase font-black text-amber-400">Tiro Mayor Ind</span>
+        <span id="kpiTiroMayorIndScore" class="text-3xl font-display font-black text-white">0</span>
+        <p id="kpiTiroMayorIndName" class="text-[10px] font-black text-amber-400 truncate">-</p>
       </div>
-
-      <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-md flex flex-col justify-between col-span-2 lg:col-span-1">
-        <span class="text-xs uppercase tracking-wider font-extrabold text-amber-600">Serie Mayor Individual</span>
-        <div class="mt-2">
-          <span id="kpiSerieMayorIndScore" class="text-4xl font-display font-black text-slate-900">0</span>
-          <p id="kpiSerieMayorIndName" class="text-xs font-black text-slate-700 truncate mt-1">-</p>
-        </div>
-        <div class="mt-2 text-[11px] text-slate-500 border-t border-slate-200 pt-2 font-bold">4 líneas c/Handicap</div>
+      <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between col-span-2 md:col-span-1">
+        <span class="text-[11px] uppercase font-black text-amber-400">Serie Mayor Ind</span>
+        <span id="kpiSerieMayorIndScore" class="text-3xl font-display font-black text-white">0</span>
+        <p id="kpiSerieMayorIndName" class="text-[10px] font-black text-amber-400 truncate">-</p>
       </div>
     </section>
 
-    <!-- NAVEGACIÓN MANUAL (TABS ESTILO PÍLDORAS) -->
-    <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3 bg-white p-3 rounded-2xl shadow-sm">
-      <button onclick="switchView('equipos')" id="tabEquipos" class="px-5 py-2.5 rounded-xl font-display font-black tracking-wider uppercase text-base transition bg-red-700 text-white shadow-md">
+    <!-- NAVEGACIÓN TABS -->
+    <div class="flex items-center gap-2 border-b border-brand-border pb-2">
+      <button onclick="switchView('equipos')" id="tabEquipos" class="px-4 py-2 rounded-lg font-display font-black uppercase text-sm bg-red-600 text-white">
         1. Clasificación Cuartetas
       </button>
-      <button onclick="switchView('cat1')" id="tabCat1" class="px-5 py-2.5 rounded-xl font-display font-black tracking-wider uppercase text-base transition bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-300">
+      <button onclick="switchView('cat1')" id="tabCat1" class="px-4 py-2 rounded-lg font-display font-black uppercase text-sm bg-[#131B2E] text-gray-400 border border-brand-border">
         2. Individual Cat 1 (191-220)
       </button>
-      <button onclick="switchView('cat2')" id="tabCat2" class="px-5 py-2.5 rounded-xl font-display font-black tracking-wider uppercase text-base transition bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-300">
+      <button onclick="switchView('cat2')" id="tabCat2" class="px-4 py-2 rounded-lg font-display font-black uppercase text-sm bg-[#131B2E] text-gray-400 border border-brand-border">
         3. Individual Cat 2 (160-190)
       </button>
-      <button onclick="switchView('premios')" id="tabPremios" class="px-5 py-2.5 rounded-xl font-display font-black tracking-wider uppercase text-base transition bg-slate-100 text-amber-700 hover:text-amber-800 border border-amber-300">
-        🏆 Premios Especiales
+      <button onclick="switchView('premios')" id="tabPremios" class="px-4 py-2 rounded-lg font-display font-black uppercase text-sm bg-[#131B2E] text-amber-400 border border-amber-500/30">
+        🏆 Premios
       </button>
-      <button onclick="switchView('equipoDetail')" id="tabEquipoDetail" class="px-5 py-2.5 rounded-xl font-display font-black tracking-wider uppercase text-base transition bg-slate-100 text-cyan-800 hover:text-cyan-900 border border-cyan-300">
+      <button onclick="switchView('equipoDetail')" id="tabEquipoDetail" class="px-4 py-2 rounded-lg font-display font-black uppercase text-sm bg-[#131B2E] text-cyan-400 border border-cyan-500/30">
         🔍 Ficha x Equipo (QR)
       </button>
     </div>
 
-    <!-- VISTA 1: TABLA CUARTETAS CON TEMA CLARO -->
-    <div id="viewEquipos" class="fade-in flex-1 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-      <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-        <div>
-          <h2 class="text-2xl font-display font-black uppercase tracking-wider text-slate-900">Clasificación Cuartetas — Tabla General</h2>
-          <p class="text-xs font-bold text-slate-500">Resaltados los primeros 5 lugares clasificatorios</p>
-        </div>
-        <span class="text-xs font-black px-3 py-1 bg-red-100 border border-red-300 text-red-800 rounded-lg">
-          L1 a L8 + Baker
-        </span>
-      </div>
+    <!-- PANTALLA 1: CUARTETAS TV -->
+    <div id="viewEquipos" class="fade-in flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
+      <h2 class="text-xl font-display font-black uppercase text-white mb-3">Clasificación Cuartetas — Líderes de Torneo</h2>
       <div class="overflow-x-auto flex-1">
-        <table class="w-full text-left text-base">
-          <thead class="bg-slate-100 text-slate-700 uppercase font-mono text-xs border-b border-slate-300">
+        <table class="w-full text-left">
+          <thead class="bg-[#0A0E17] text-gray-400 font-mono text-xs uppercase border-b border-brand-border">
             <tr>
-              <th class="py-3 px-3 text-center w-12 font-black">Pos</th>
-              <th class="py-3 px-3 font-black min-w-[200px]">Equipo</th>
-              <th class="py-3 px-2 text-center font-black">Prom</th>
-              <th class="py-3 px-2 text-center font-black text-amber-700">HDCP</th>
-              <th class="py-3 px-2 text-center font-black text-amber-700">LB HDCP</th>
-              <th class="py-3 px-2 text-center">L1</th>
-              <th class="py-3 px-2 text-center">L2</th>
-              <th class="py-3 px-2 text-center">L3</th>
-              <th class="py-3 px-2 text-center">L4</th>
-              <th class="py-3 px-2 text-center text-amber-800 font-black">LB1</th>
-              <th class="py-3 px-3 text-right font-black text-slate-800">Tot Vie</th>
-              <th class="py-3 px-2 text-center">L5</th>
-              <th class="py-3 px-2 text-center">L6</th>
-              <th class="py-3 px-2 text-center">L7</th>
-              <th class="py-3 px-2 text-center">L8</th>
-              <th class="py-3 px-2 text-center text-amber-800 font-black">LB2</th>
-              <th class="py-3 px-3 text-right font-black text-slate-800">Tot Sáb</th>
-              <th class="py-3 px-4 text-right font-black text-red-700 text-lg bg-red-50">Total Acum</th>
-              <th class="py-3 px-3 text-center font-black">Estado Finales</th>
+              <th class="py-3 px-3 text-center">POS</th>
+              <th class="py-3 px-3">EQUIPO</th>
+              <th class="py-3 px-2 text-center text-amber-400">HDCP EQ</th>
+              <th class="py-3 px-2 text-center text-amber-400">HDCP LB</th>
+              <th class="py-3 px-2 text-center">BAKER 1</th>
+              <th class="py-3 px-2 text-center">BAKER 2</th>
+              <th class="py-3 px-3 text-right">SCRATCH</th>
+              <th class="py-3 px-4 text-right text-amber-400 font-black">TOTAL C/HDCP</th>
+              <th class="py-3 px-3 text-center">ESTADO</th>
             </tr>
           </thead>
-          <tbody id="tbodyEquipos" class="divide-y divide-slate-200 font-semibold">
-            <!-- Render dinámico desde app.js -->
+          <tbody id="tbodyEquipos" class="divide-y divide-brand-border/60">
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- VISTA 2: INDIVIDUAL CAT 1 -->
-    <div id="viewCat1" class="fade-in hidden flex-1 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-      <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-        <h2 class="text-2xl font-display font-black uppercase tracking-wider text-slate-900">Clasificación Individual — Categoría 1</h2>
-        <span class="text-xs font-extrabold text-slate-500">Top 32 Clasificatorios</span>
-      </div>
+    <!-- PANTALLA 2: CAT 1 TV -->
+    <div id="viewCat1" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
+      <h2 class="text-xl font-display font-black uppercase text-white mb-3">Individual Categoría 1 — Líderes Top 8</h2>
       <div class="overflow-x-auto flex-1">
-        <table class="w-full text-left text-base">
-          <thead class="bg-slate-100 text-slate-700 uppercase font-mono text-xs border-b border-slate-300">
+        <table class="w-full text-left">
+          <thead class="bg-[#0A0E17] text-gray-400 font-mono text-xs uppercase border-b border-brand-border">
             <tr>
-              <th class="py-3 px-3 text-center w-12 font-black">Pos</th>
-              <th class="py-3 px-3 font-black min-w-[180px]">Jugador Oficial</th>
-              <th class="py-3 px-3 font-black text-slate-500">Equipo</th>
-              <th class="py-3 px-2 text-center font-black">Prom</th>
-              <th class="py-3 px-2 text-center font-black text-amber-700">HDCP</th>
-              <th class="py-3 px-2 text-center">L1</th>
-              <th class="py-3 px-2 text-center">L2</th>
-              <th class="py-3 px-2 text-center">L3</th>
-              <th class="py-3 px-2 text-center">L4</th>
-              <th class="py-3 px-3 text-right font-black text-slate-800">Tot Vie</th>
-              <th class="py-3 px-2 text-center">L5</th>
-              <th class="py-3 px-2 text-center">L6</th>
-              <th class="py-3 px-2 text-center">L7</th>
-              <th class="py-3 px-2 text-center">L8</th>
-              <th class="py-3 px-3 text-right font-black text-slate-800">Tot Sáb</th>
-              <th class="py-3 px-4 text-right font-black text-red-700 text-lg bg-red-50">Total Acum</th>
+              <th class="py-3 px-3 text-center">POS</th>
+              <th class="py-3 px-3">JUGADOR OFICIAL</th>
+              <th class="py-3 px-3">EQUIPO</th>
+              <th class="py-3 px-2 text-center">PROM</th>
+              <th class="py-3 px-2 text-center text-amber-400">HDCP</th>
+              <th class="py-3 px-3 text-right">SCRATCH</th>
+              <th class="py-3 px-4 text-right text-amber-400 font-black">TOTAL C/HDCP</th>
             </tr>
           </thead>
-          <tbody id="tbodyCat1" class="divide-y divide-slate-200 font-semibold">
-            <!-- Render dinámico -->
+          <tbody id="tbodyCat1" class="divide-y divide-brand-border/60">
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- VISTA 3: INDIVIDUAL CAT 2 -->
-    <div id="viewCat2" class="fade-in hidden flex-1 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-      <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-        <h2 class="text-2xl font-display font-black uppercase tracking-wider text-slate-900">Clasificación Individual — Categoría 2</h2>
-        <span class="text-xs font-extrabold text-slate-500">Top 32 Clasificatorios</span>
-      </div>
+    <!-- PANTALLA 3: CAT 2 TV -->
+    <div id="viewCat2" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
+      <h2 class="text-xl font-display font-black uppercase text-white mb-3">Individual Categoría 2 — Líderes Top 8</h2>
       <div class="overflow-x-auto flex-1">
-        <table class="w-full text-left text-base">
-          <thead class="bg-slate-100 text-slate-700 uppercase font-mono text-xs border-b border-slate-300">
+        <table class="w-full text-left">
+          <thead class="bg-[#0A0E17] text-gray-400 font-mono text-xs uppercase border-b border-brand-border">
             <tr>
-              <th class="py-3 px-3 text-center w-12 font-black">Pos</th>
-              <th class="py-3 px-3 font-black min-w-[180px]">Jugador Oficial</th>
-              <th class="py-3 px-3 font-black text-slate-500">Equipo</th>
-              <th class="py-3 px-2 text-center font-black">Prom</th>
-              <th class="py-3 px-2 text-center font-black text-amber-700">HDCP</th>
-              <th class="py-3 px-2 text-center">L1</th>
-              <th class="py-3 px-2 text-center">L2</th>
-              <th class="py-3 px-2 text-center">L3</th>
-              <th class="py-3 px-2 text-center">L4</th>
-              <th class="py-3 px-3 text-right font-black text-slate-800">Tot Vie</th>
-              <th class="py-3 px-2 text-center">L5</th>
-              <th class="py-3 px-2 text-center">L6</th>
-              <th class="py-3 px-2 text-center">L7</th>
-              <th class="py-3 px-2 text-center">L8</th>
-              <th class="py-3 px-3 text-right font-black text-slate-800">Tot Sáb</th>
-              <th class="py-3 px-4 text-right font-black text-red-700 text-lg bg-red-50">Total Acum</th>
+              <th class="py-3 px-3 text-center">POS</th>
+              <th class="py-3 px-3">JUGADOR OFICIAL</th>
+              <th class="py-3 px-3">EQUIPO</th>
+              <th class="py-3 px-2 text-center">PROM</th>
+              <th class="py-3 px-2 text-center text-amber-400">HDCP</th>
+              <th class="py-3 px-3 text-right">SCRATCH</th>
+              <th class="py-3 px-4 text-right text-amber-400 font-black">TOTAL C/HDCP</th>
             </tr>
           </thead>
-          <tbody id="tbodyCat2" class="divide-y divide-slate-200 font-semibold">
-            <!-- Render dinámico -->
+          <tbody id="tbodyCat2" class="divide-y divide-brand-border/60">
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- VISTA 4: PREMIOS ESPECIALES (MÓVILES / QR) -->
-    <div id="viewPremios" class="fade-in hidden flex-1 bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl">
-      <h2 class="text-2xl font-display font-black uppercase text-amber-700 mb-4 border-b border-slate-200 pb-2">
-        🏆 Tablero Oficial de Premios Especiales & Líderes
-      </h2>
-      <div id="containerPremiosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Render dinámico en app.js -->
-      </div>
+    <!-- PANTALLA 4: PREMIOS -->
+    <div id="viewPremios" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-6 shadow-2xl">
+      <h2 class="text-2xl font-display font-black uppercase text-amber-400 mb-4">🏆 Premios Especiales</h2>
+      <div id="containerPremiosGrid" class="grid grid-cols-1 md:grid-cols-4 gap-4"></div>
     </div>
 
-    <!-- VISTA 5: FICHA INTERACTIVA POR EQUIPO (MÓVILES / QR) -->
-    <div id="viewEquipoDetail" class="fade-in hidden flex-1 bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-6">
-        <div>
-          <h2 class="text-2xl font-display font-black uppercase text-slate-900">Consulta Interactiva x Cuarteta</h2>
-          <p class="text-xs text-slate-500 font-bold">Selecciona tu equipo para ver el desglose línea a línea</p>
-        </div>
-        <select id="selectDetailEquipo" class="bg-slate-100 border border-slate-300 text-slate-900 px-4 py-2.5 rounded-xl font-bold text-base focus:outline-none">
-        </select>
+    <!-- PANTALLA 5: FICHA QR -->
+    <div id="viewEquipoDetail" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-6 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-brand-border pb-4 mb-4">
+        <h2 class="text-2xl font-display font-black uppercase text-cyan-400">Consulta Ficha x Equipo</h2>
+        <select id="selectDetailEquipo" class="bg-[#0A0E17] border border-cyan-500 text-white px-4 py-2 rounded-xl font-bold"></select>
       </div>
-      <div id="containerEquipoDetailContent">
-        <!-- Render dinámico en app.js -->
-      </div>
+      <div id="containerEquipoDetailContent"></div>
     </div>
 
   </main>
 
-  <!-- MODAL CAPTURA MESA DE CONTROL -->
-  <div id="modalCapture" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-300 rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col max-h-[92vh] overflow-y-auto">
-      
-      <div class="flex justify-between items-center border-b border-slate-200 pb-4">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-red-700 flex items-center justify-center font-bold text-white text-xl">
-            ✍️
-          </div>
-          <div>
-            <h3 class="text-xl font-display font-black uppercase text-slate-900 tracking-wider">Captura Mesa de Control</h3>
-            <p class="text-xs text-slate-500 font-bold">Ingreso exclusivo para administradores</p>
-          </div>
-        </div>
-        <button id="btnCloseCapture" class="text-slate-400 hover:text-slate-700 p-2">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
+  <!-- MODAL CAPTURA -->
+  <div id="modalCapture" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+    <div class="bg-[#131B2E] border border-brand-border rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-brand-border pb-4">
+        <h3 class="text-lg font-display font-black uppercase text-white">Captura Mesa Control</h3>
+        <button id="btnCloseCapture" class="text-gray-400 p-2">✕</button>
       </div>
 
-      <form id="formCapture" class="mt-5 space-y-4">
+      <form id="formCapture" class="mt-4 space-y-4">
         <div>
-          <label class="block text-xs uppercase tracking-wider font-extrabold text-red-700 mb-1">PIN de Seguridad Obligatorio</label>
-          <input type="password" id="inputPin" required placeholder="Ingrese PIN" class="w-full bg-slate-100 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 font-mono focus:outline-none focus:border-red-700 text-center tracking-widest text-xl font-bold">
+          <label class="block text-xs uppercase font-extrabold text-amber-400 mb-1">PIN de Seguridad</label>
+          <input type="password" id="inputPin" required placeholder="PIN" class="w-full bg-[#0A0E17] border border-brand-border rounded-xl px-4 py-3 text-white text-center font-mono font-bold text-xl">
         </div>
 
         <div>
-          <label class="block text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">Seleccionar Cuarteta / Equipo</label>
-          <select id="selectEquipo" required class="w-full bg-slate-100 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-bold focus:outline-none focus:border-red-700">
-          </select>
+          <label class="block text-xs uppercase font-bold text-gray-300 mb-1">Equipo</label>
+          <select id="selectEquipo" required class="w-full bg-[#0A0E17] border border-brand-border rounded-xl px-4 py-2 text-white font-bold"></select>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">Sesión</label>
-            <select id="selectSesion" class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-semibold focus:outline-none focus:border-red-700">
+            <label class="block text-xs uppercase font-bold text-gray-300 mb-1">Sesión</label>
+            <select id="selectSesion" class="w-full bg-[#0A0E17] border border-brand-border rounded-xl px-3 py-2 text-white font-semibold">
               <option value="VIERNES">Viernes 30 Oct</option>
               <option value="SABADO">Sábado 31 Oct</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">Tipo de Entrada</label>
-            <select id="selectTipo" class="w-full bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-semibold focus:outline-none focus:border-red-700">
-              <option value="LINEA">Línea Regular (4 Jugadores)</option>
-              <option value="BAKER">Línea Baker (Equipo)</option>
+            <label class="block text-xs uppercase font-bold text-gray-300 mb-1">Tipo</label>
+            <select id="selectTipo" class="w-full bg-[#0A0E17] border border-brand-border rounded-xl px-3 py-2 text-white font-semibold">
+              <option value="LINEA">Línea Regular</option>
+              <option value="BAKER">Línea Baker</option>
             </select>
           </div>
         </div>
 
         <div id="containerNumLinea">
-          <label class="block text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">Número de Línea</label>
-          <select id="selectNumLinea" class="w-full bg-slate-100 border border-slate-300 rounded-xl px-4 py-2 text-slate-900 font-semibold focus:outline-none focus:border-red-700">
-            <option value="1">Línea 1 (Viernes)</option>
-            <option value="2">Línea 2 (Viernes)</option>
-            <option value="3">Línea 3 (Viernes)</option>
-            <option value="4">Línea 4 (Viernes)</option>
-            <option value="5">Línea 5 (Sábado)</option>
-            <option value="6">Línea 6 (Sábado)</option>
-            <option value="7">Línea 7 (Sábado)</option>
-            <option value="8">Línea 8 (Sábado)</option>
+          <label class="block text-xs uppercase font-bold text-gray-300 mb-1">Número de Línea</label>
+          <select id="selectNumLinea" class="w-full bg-[#0A0E17] border border-brand-border rounded-xl px-4 py-2 text-white font-semibold">
+            <option value="1">Línea 1</option><option value="2">Línea 2</option><option value="3">Línea 3</option><option value="4">Línea 4</option>
+            <option value="5">Línea 5</option><option value="6">Línea 6</option><option value="7">Línea 7</option><option value="8">Línea 8</option>
           </select>
         </div>
 
-        <div id="containerJugadores" class="space-y-3 border-t border-slate-200 pt-3">
-          <p class="text-xs text-slate-500 font-bold uppercase">Puntuaciones Jugadores (0 - 300)</p>
-          <div id="inputsJugadoresList" class="space-y-2">
-          </div>
+        <div id="containerJugadores" class="space-y-2 border-t border-brand-border pt-3">
+          <p class="text-xs text-gray-400 font-bold uppercase">Scores Jugadores (0-300)</p>
+          <div id="inputsJugadoresList" class="space-y-2"></div>
         </div>
 
-        <div id="containerBakerInput" class="hidden border-t border-slate-200 pt-3">
-          <label class="block text-xs uppercase tracking-wider font-bold text-slate-700 mb-1">Puntuación Línea Baker (0 - 300)</label>
-          <input type="number" id="inputBakerScore" min="0" max="300" placeholder="Ej. 195" class="w-full bg-slate-100 border border-slate-300 rounded-xl px-4 py-3 text-3xl font-black font-mono text-center text-red-700 focus:outline-none focus:border-red-700">
+        <div id="containerBakerInput" class="hidden border-t border-brand-border pt-3">
+          <label class="block text-xs uppercase font-bold text-gray-300 mb-1">Score Baker (0-300)</label>
+          <input type="number" id="inputBakerScore" min="0" max="300" placeholder="Ej. 195" class="w-full bg-[#0A0E17] border border-brand-border rounded-xl px-4 py-3 text-3xl font-black font-mono text-center text-amber-400">
         </div>
 
         <div id="captureFeedback" class="hidden text-center text-xs py-2 px-3 rounded-xl font-bold"></div>
 
-        <div class="pt-3 flex space-x-3">
-          <button type="submit" id="btnSubmitCapture" class="flex-1 bg-red-700 hover:bg-red-800 font-extrabold py-3.5 px-4 rounded-xl text-white shadow-md border border-red-600 transition text-base">
-            Guardar y Sincronizar
-          </button>
-        </div>
+        <button type="submit" id="btnSubmitCapture" class="w-full bg-red-600 font-black py-3 rounded-xl text-white border border-red-500">
+          Guardar y Sincronizar
+        </button>
       </form>
     </div>
   </div>

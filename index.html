@@ -167,13 +167,13 @@
     <!-- NAVEGACIÓN MANUAL DE PANTALLAS (TABS) -->
     <div class="flex items-center space-x-2 border-b border-brand-border pb-3">
       <button onclick="switchView('equipos')" id="tabEquipos" class="px-5 py-2.5 rounded-xl font-display font-bold tracking-wider uppercase text-sm transition bg-red-600 text-white shadow-lg">
-        1. Clasificación Cuartetas
+1. Clasificación Cuartetas
       </button>
       <button onclick="switchView('cat1')" id="tabCat1" class="px-5 py-2.5 rounded-xl font-display font-bold tracking-wider uppercase text-sm transition bg-brand-card text-gray-400 hover:text-white border border-brand-border">
-        2. Individual Cat 1 (Prom 191-220)
+2. Individual Cat 1 (Prom 191-220)
       </button>
       <button onclick="switchView('cat2')" id="tabCat2" class="px-5 py-2.5 rounded-xl font-display font-bold tracking-wider uppercase text-sm transition bg-brand-card text-gray-400 hover:text-white border border-brand-border">
-        3. Individual Cat 2 (Prom 160-190)
+3. Individual Cat 2 (Prom 160-190)
       </button>
     </div>
 
@@ -194,6 +194,7 @@
             <tr>
               <th class="py-3 px-4 text-center w-16">Pos</th>
               <th class="py-3 px-4">No. & Nombre de Cuarteta</th>
+              <th class="py-3 px-4 text-center">HDCP Eq</th>
               <th class="py-3 px-4 text-center">Baker 1</th>
               <th class="py-3 px-4 text-center">Baker 2</th>
               <th class="py-3 px-4 text-right">Scratch Vie</th>
@@ -294,7 +295,7 @@
         <!-- PIN de Seguridad -->
         <div>
           <label class="block text-xs uppercase tracking-wider font-semibold text-gray-300 mb-1">PIN de Mesa de Control</label>
-          <input type="password" id="inputPin" required value="4949" class="w-full bg-[#0E1420] border border-brand-border rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-red-500 text-center tracking-widest text-lg">
+          <input type="password" id="inputPin" required value="" placeholder="Ingrese PIN" class="w-full bg-[#0E1420] border border-brand-border rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-red-500 text-center tracking-widest text-lg">
         </div>
 
         <!-- Selector de Equipo -->

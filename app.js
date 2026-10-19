@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 ANIVERSARIO 2026
- * TV Display & Data Engine (Alto Contraste y Robusto)
+ * TV Display & Data Engine (Ajuste de Columnas Cuartetas)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -109,7 +109,7 @@ function renderPerfectGameAlert() {
   }
 }
 
-/* RENDER TV CUARTETAS (LETRAS GIGANTES) */
+/* RENDER TV CUARTETAS (CON DESGLOSE DE ENCABEZADOS EXACTO) */
 function renderTableEquipos() {
   const tbody = document.getElementById('tbodyEquipos');
   if (!tbody) return;
@@ -117,21 +117,23 @@ function renderTableEquipos() {
   const equipos = tournamentData.equipos || [];
 
   equipos.forEach((eq, idx) => {
-    let estado = idx === 0 ? '🏆 Sembrado #1' : idx === 1 ? '⭐ Sembrado #2' : '⚡ Clasificado';
     const row = document.createElement('tr');
-    row.className = 'bg-[#18233A] text-white text-xl font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
+    row.className = 'bg-[#18233A] text-white text-lg font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
+    
     row.innerHTML = `
-      <td class="py-4 px-3 text-center font-black font-mono text-2xl text-amber-400">${eq.posicion || (idx + 1)}</td>
-      <td class="py-4 px-3 font-extrabold text-2xl text-white">${eq.nombreEquipo || '-'}</td>
-      <td class="py-4 px-2 text-center font-mono text-amber-300 font-black">+${eq.hdcpEquipo || 0}</td>
-      <td class="py-4 px-2 text-center font-mono text-amber-400 font-black">+${eq.hdcpBaker || 0}</td>
-      <td class="py-4 px-2 text-center font-mono text-gray-200">${eq.bakerVie || '-'}</td>
-      <td class="py-4 px-2 text-center font-mono text-gray-200">${eq.bakerSab || '-'}</td>
-      <td class="py-4 px-3 text-right font-mono text-gray-300">${Number(eq.granTotScratch || 0).toLocaleString()}</td>
-      <td class="py-4 px-4 text-right font-mono font-black text-amber-400 text-3xl bg-amber-500/10">
+      <td class="py-3 px-2 text-center font-black font-mono text-xl text-amber-400">${eq.posicion || (idx + 1)}</td>
+      <td class="py-3 px-3 font-extrabold text-xl text-white whitespace-nowrap">${eq.nombreEquipo || '-'}</td>
+      <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">+${eq.hdcpEquipo || 0}</td>
+      <td class="py-3 px-2 text-center font-mono text-amber-400 font-black">+${eq.hdcpBaker || 0}</td>
+      <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchVie || 0).toLocaleString()}</td>
+      <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerVie || '-'}</td>
+      <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(eq.totVieHdcp || 0).toLocaleString()}</td>
+      <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchSab || 0).toLocaleString()}</td>
+      <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerSab || '-'}</td>
+      <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(eq.totSabHdcp || 0).toLocaleString()}</td>
+      <td class="py-3 px-4 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
         ${Number(eq.granTotHdcp || 0).toLocaleString()}
       </td>
-      <td class="py-4 px-3 text-center text-sm font-black text-emerald-400">${estado}</td>
     `;
     tbody.appendChild(row);
   });
@@ -257,179 +259,4 @@ function renderEquipoDetailContent() {
       </table>
     </div>
   `;
-}
-
-function initCarousel() {
-  setInterval(() => {
-    if (isPaused) return;
-    carouselTimer--;
-    if (progressBar) progressBar.style.width = `${(carouselTimer / CAROUSEL_INTERVAL_SEC) * 100}%`;
-    if (timerElem) timerElem.innerText = `00:${carouselTimer.toString().padStart(2, '0')}`;
-    if (carouselTimer <= 0) {
-      currentViewIndex = (currentViewIndex + 1) % views.length;
-      switchView(views[currentViewIndex]);
-      carouselTimer = CAROUSEL_INTERVAL_SEC;
-      if (progressBar) progressBar.style.width = '100%';
-      if (currentViewIndex === 0) fetchTournamentData();
-    }
-  }, 1000);
-}
-
-function switchView(viewName) {
-  const allViews = ['equipos', 'cat1', 'cat2', 'premios', 'equipoDetail'];
-  allViews.forEach(v => {
-    const el = document.getElementById(`view${capitalize(v)}`);
-    const tab = document.getElementById(`tab${capitalize(v)}`);
-    if (el && tab) {
-      if (v === viewName) {
-        el.classList.remove('hidden');
-        tab.className = 'px-4 py-2 rounded-lg font-display font-black uppercase text-sm bg-red-600 text-white';
-      } else {
-        el.classList.add('hidden');
-        tab.className = 'px-4 py-2 rounded-lg font-display font-black uppercase text-sm bg-[#131B2E] text-gray-400 border border-brand-border';
-      }
-    }
-  });
-
-  const titles = { equipos: 'CUARTETAS (EQUIPOS)', cat1: 'INDIVIDUAL CATEGORÍA 1', cat2: 'INDIVIDUAL CATEGORÍA 2', premios: 'PREMIOS ESPECIALES', equipoDetail: 'FICHA POR EQUIPO' };
-  if (currentViewBadge) currentViewBadge.innerText = titles[viewName] || viewName.toUpperCase();
-}
-
-function togglePauseCarousel() {
-  isPaused = !isPaused;
-}
-
-function capitalize(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-function initCaptureModal() {
-  const modal = document.getElementById('modalCapture');
-  const btnOpen = document.getElementById('btnOpenCapture');
-  const btnClose = document.getElementById('btnCloseCapture');
-  
-  if (btnOpen && modal) btnOpen.addEventListener('click', () => modal.classList.remove('hidden'));
-  if (btnClose && modal) btnClose.addEventListener('click', () => modal.classList.add('hidden'));
-
-  const selectTipo = document.getElementById('selectTipo');
-  if (selectTipo) selectTipo.addEventListener('change', toggleCaptureFormType);
-  
-  const selectEq = document.getElementById('selectEquipo');
-  if (selectEq) selectEq.addEventListener('change', renderCapturePlayerInputs);
-
-  const formCap = document.getElementById('formCapture');
-  if (formCap) {
-    formCap.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      await submitScoreCapture();
-    });
-  }
-}
-
-function toggleCaptureFormType() {
-  const isBaker = document.getElementById('selectTipo').value === 'BAKER';
-  const cLinea = document.getElementById('containerNumLinea');
-  if (cLinea) cLinea.classList.toggle('hidden', isBaker);
-  
-  const cJug = document.getElementById('containerJugadores');
-  if (cJug) cJug.classList.toggle('hidden', isBaker);
-  
-  const cBaker = document.getElementById('containerBakerInput');
-  if (cBaker) cBaker.classList.toggle('hidden', !isBaker);
-
-  const playerInputs = document.querySelectorAll('.inputScoreJugador');
-  playerInputs.forEach(inp => isBaker ? inp.removeAttribute('required') : inp.setAttribute('required', 'true'));
-  
-  const bakerInput = document.getElementById('inputBakerScore');
-  if (bakerInput) isBaker ? bakerInput.setAttribute('required', 'true') : bakerInput.removeAttribute('required');
-}
-
-function populateCaptureSelects() {
-  const select = document.getElementById('selectEquipo');
-  if (!select) return;
-  select.innerHTML = '';
-  (tournamentData.equipos || []).forEach(eq => {
-    const opt = document.createElement('option');
-    opt.value = eq.numEquipo;
-    opt.innerText = `Equipo ${eq.numEquipo}: ${eq.nombreEquipo}`;
-    select.appendChild(opt);
-  });
-  renderCapturePlayerInputs();
-}
-
-function renderCapturePlayerInputs() {
-  const select = document.getElementById('selectEquipo');
-  const container = document.getElementById('inputsJugadoresList');
-  if (!container || !select) return;
-  container.innerHTML = '';
-  
-  const numEq = Number(select.value);
-  const eq = (tournamentData.equipos || []).find(e => e.numEquipo === numEq);
-  if (!eq || !eq.jugadores) return;
-
-  const isBaker = document.getElementById('selectTipo').value === 'BAKER';
-  eq.jugadores.forEach((j, idx) => {
-    const div = document.createElement('div');
-    div.className = 'flex items-center justify-between bg-[#0A0E17] border border-brand-border p-2 rounded-xl';
-    div.innerHTML = `
-      <div class="truncate mr-2">
-        <p class="text-xs font-bold text-white truncate">${j.nombreJugador}</p>
-        <span class="text-[10px] text-gray-400">HDCP: ${j.hdcp}</span>
-      </div>
-      <input type="number" min="0" max="300" ${isBaker ? '' : 'required'} placeholder="0" data-player-idx="${idx}" class="inputScoreJugador w-20 bg-[#131B2E] border border-brand-border rounded-lg px-2 py-1 text-center text-white font-mono font-bold text-lg">
-    `;
-    container.appendChild(div);
-  });
-}
-
-async function submitScoreCapture() {
-  const btn = document.getElementById('btnSubmitCapture');
-  const feedback = document.getElementById('captureFeedback');
-  if (btn) { btn.disabled = true; btn.innerText = 'Guardando...'; }
-
-  const pin = document.getElementById('inputPin').value;
-  const numEquipo = Number(document.getElementById('selectEquipo').value);
-  const sesion = document.getElementById('selectSesion').value;
-  const tipo = document.getElementById('selectTipo').value;
-  const numLinea = Number(document.getElementById('selectNumLinea').value);
-
-  let payload = { pin, numEquipo, sesion, tipo };
-  if (tipo === 'BAKER') {
-    payload.score = Number(document.getElementById('inputBakerScore').value);
-  } else {
-    payload.numLinea = numLinea;
-    const inputs = document.querySelectorAll('.inputScoreJugador');
-    payload.scores = Array.from(inputs).map(inp => Number(inp.value) || 0);
-  }
-
-  try {
-    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
-    const result = await res.json();
-    if (feedback) feedback.classList.remove('hidden');
-    if (result.status === 'success') {
-      if (feedback) {
-        feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-emerald-950 text-emerald-300 border border-emerald-600';
-        feedback.innerText = '✓ Guardado correctamente.';
-      }
-      await fetchTournamentData();
-      setTimeout(() => {
-        const modal = document.getElementById('modalCapture');
-        if (modal) modal.classList.add('hidden');
-        if (feedback) feedback.classList.add('hidden');
-      }, 1200);
-    } else {
-      if (feedback) {
-        feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-red-950 text-red-300 border border-red-600';
-        feedback.innerText = `Error: ${result.message}`;
-      }
-    }
-  } catch (err) {
-    if (feedback) {
-      feedback.classList.remove('hidden');
-      feedback.className = 'text-center text-xs py-2 px-3 rounded-xl font-bold bg-red-950 text-red-300 border border-red-600';
-      feedback.innerText = 'Error al comunicar con la base de datos.';
-    }
-  } finally {
-    if (btn) { btn.disabled = false; btn.innerText = 'Guardar y Sincronizar'; }
-  }
 }

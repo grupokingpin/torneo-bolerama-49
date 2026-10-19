@@ -90,7 +90,7 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="flex-1 p-4 flex flex-col space-y-4 max-w-[1920px] w-full mx-auto">
 
-    <!-- KPIs TV ALTO CONTRASTE -->
+    <!-- KPIs TV -->
     <section class="grid grid-cols-2 md:grid-cols-5 gap-3">
       <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
         <span class="text-[11px] uppercase font-black text-gray-400">Promedio Liga</span>
@@ -138,24 +138,25 @@
       </button>
     </div>
 
-    <!-- PANTALLA 1: CUARTETAS TV -->
+    <!-- PANTALLA 1: CUARTETAS TV (TABLA DE 12 COLUMNAS PERFECTAMENTE ALINEADAS) -->
     <div id="viewEquipos" class="fade-in flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
-      <h2 class="text-xl font-display font-black uppercase text-white mb-3">Clasificación Cuartetas — Líderes de Torneo</h2>
+      <h2 class="text-xl font-display font-black uppercase text-white mb-3">Clasificación Cuartetas — Tabla General de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
         <table class="w-full text-left">
           <thead class="bg-[#0A0E17] text-gray-300 font-mono text-xs uppercase border-b border-brand-border">
             <tr>
-              <th class="py-3 px-2 text-center w-12 font-black">POS</th>
+              <th class="py-3 px-2 text-center font-black">POS</th>
               <th class="py-3 px-3 font-black whitespace-nowrap">EQUIPO</th>
               <th class="py-3 px-2 text-center text-amber-400 font-black">HDCP EQ</th>
               <th class="py-3 px-2 text-center text-amber-400 font-black">HDCP LB</th>
               <th class="py-3 px-2 text-right font-black">SCRATCH VIE</th>
               <th class="py-3 px-2 text-center font-black text-amber-300">LB1</th>
-              <th class="py-3 px-3 text-right font-black text-gray-200">TOT VIE C/HDCP</th>
+              <th class="py-3 px-3 text-right font-black text-gray-100">TOT VIE C/HDCP</th>
               <th class="py-3 px-2 text-right font-black">SCRATCH SÁB</th>
               <th class="py-3 px-2 text-center font-black text-amber-300">LB2</th>
-              <th class="py-3 px-3 text-right font-black text-gray-200">TOT SÁB C/HDCP</th>
+              <th class="py-3 px-3 text-right font-black text-gray-100">TOT SÁB C/HDCP</th>
               <th class="py-3 px-4 text-right text-amber-400 font-black">TOTAL GENERAL C/HDCP</th>
+              <th class="py-3 px-3 text-center font-black">ESTADO</th>
             </tr>
           </thead>
           <tbody id="tbodyEquipos" class="divide-y divide-brand-border/60">

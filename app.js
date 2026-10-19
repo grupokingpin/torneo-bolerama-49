@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 ANIVERSARIO 2026
- * TV Display & Data Engine (Ajuste de Columnas Cuartetas)
+ * TV Display & Data Engine (Rendereo Exacto de 12 Columnas)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -109,7 +109,7 @@ function renderPerfectGameAlert() {
   }
 }
 
-/* RENDER TV CUARTETAS (CON DESGLOSE DE ENCABEZADOS EXACTO) */
+/* RENDER TV CUARTETAS (12 COLUMNAS MAPEDAS EXACTAS EN ORDEN) */
 function renderTableEquipos() {
   const tbody = document.getElementById('tbodyEquipos');
   if (!tbody) return;
@@ -117,22 +117,49 @@ function renderTableEquipos() {
   const equipos = tournamentData.equipos || [];
 
   equipos.forEach((eq, idx) => {
+    let estado = idx === 0 ? '🏆 Sembrado #1' : idx === 1 ? '⭐ Sembrado #2' : '⚡ Clasificado';
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white text-lg font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
+      <!-- 1. POS -->
       <td class="py-3 px-2 text-center font-black font-mono text-xl text-amber-400">${eq.posicion || (idx + 1)}</td>
+      
+      <!-- 2. EQUIPO -->
       <td class="py-3 px-3 font-extrabold text-xl text-white whitespace-nowrap">${eq.nombreEquipo || '-'}</td>
+      
+      <!-- 3. HDCP EQ -->
       <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">+${eq.hdcpEquipo || 0}</td>
+      
+      <!-- 4. HDCP LB -->
       <td class="py-3 px-2 text-center font-mono text-amber-400 font-black">+${eq.hdcpBaker || 0}</td>
+      
+      <!-- 5. SCRATCH VIE -->
       <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchVie || 0).toLocaleString()}</td>
+      
+      <!-- 6. LB1 -->
       <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerVie || '-'}</td>
+      
+      <!-- 7. TOT VIE C/HDCP -->
       <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(eq.totVieHdcp || 0).toLocaleString()}</td>
+      
+      <!-- 8. SCRATCH SÁB -->
       <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchSab || 0).toLocaleString()}</td>
+      
+      <!-- 9. LB2 -->
       <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerSab || '-'}</td>
+      
+      <!-- 10. TOT SÁB C/HDCP -->
       <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(eq.totSabHdcp || 0).toLocaleString()}</td>
+      
+      <!-- 11. TOTAL GENERAL C/HDCP -->
       <td class="py-3 px-4 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
         ${Number(eq.granTotHdcp || 0).toLocaleString()}
+      </td>
+      
+      <!-- 12. ESTADO -->
+      <td class="py-3 px-3 text-center text-xs font-black ${idx < 2 ? 'text-amber-400' : 'text-emerald-400'}">
+        ${estado}
       </td>
     `;
     tbody.appendChild(row);

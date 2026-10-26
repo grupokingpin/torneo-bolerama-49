@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Compactación Máxima Individual)
+ * TV Display & Data Engine (Ficha x Equipo Compacta)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -109,7 +109,7 @@ function renderPerfectGameAlert() {
   }
 }
 
-/* RENDER TV CUARTETAS (TABLA COMPACTA) */
+/* RENDER TV CUARTETAS */
 function renderTableEquipos() {
   const tbody = document.getElementById('tbodyEquipos');
   if (!tbody) return;
@@ -141,7 +141,7 @@ function renderTableEquipos() {
   });
 }
 
-/* RENDER TV INDIVIDUAL CAT 1 (COMPACTACIÓN DE COLUMNAS) */
+/* RENDER TV INDIVIDUAL CAT 1 */
 function renderTableCat1() {
   const tbody = document.getElementById('tbodyCat1');
   if (!tbody) return;
@@ -155,21 +155,12 @@ function renderTableCat1() {
     row.className = 'bg-[#18233A] text-white font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <!-- 1. POS -->
       <td class="py-2.5 px-2 text-center font-black font-mono text-lg text-amber-400">${j.posicion || (idx + 1)}</td>
-      
-      <!-- 2. JUGADOR OFICIAL (Compactado sin desborde) -->
       <td class="py-2.5 px-2 font-extrabold text-base text-white whitespace-nowrap max-w-[210px] truncate" title="${j.nombreJugador}">
         ${j.nombreJugador || '-'}
       </td>
-      
-      <!-- 3. HDCP -->
       <td class="py-2.5 px-2 text-center font-mono text-amber-300 font-black text-base whitespace-nowrap">+${j.hdcp || 0}</td>
-      
-      <!-- 4. PROM SCRATCH -->
       <td class="py-2.5 px-2 text-center font-mono text-emerald-400 font-black text-lg whitespace-nowrap">${promTruncado}</td>
-      
-      <!-- 5. L1 a L8 (Espaciado reducido) -->
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l1 || '-'}</td>
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l2 || '-'}</td>
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l3 || '-'}</td>
@@ -178,11 +169,7 @@ function renderTableCat1() {
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l6 || '-'}</td>
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l7 || '-'}</td>
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l8 || '-'}</td>
-      
-      <!-- 13. TOTAL SCRATCH (Pegado y compacto) -->
       <td class="py-2.5 px-2.5 text-right font-mono font-extrabold text-gray-100 text-base whitespace-nowrap">${Number(j.totScratch || 0).toLocaleString()}</td>
-      
-      <!-- 14. TOTAL GENERAL C/HDCP -->
       <td class="py-2.5 px-3 text-right font-mono font-black text-amber-400 text-xl bg-amber-500/10 whitespace-nowrap">
         ${Number(j.totHdcp || 0).toLocaleString()}
       </td>
@@ -191,7 +178,7 @@ function renderTableCat1() {
   });
 }
 
-/* RENDER TV INDIVIDUAL CAT 2 (COMPACTACIÓN DE COLUMNAS) */
+/* RENDER TV INDIVIDUAL CAT 2 */
 function renderTableCat2() {
   const tbody = document.getElementById('tbodyCat2');
   if (!tbody) return;
@@ -205,21 +192,12 @@ function renderTableCat2() {
     row.className = 'bg-[#18233A] text-white font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <!-- 1. POS -->
       <td class="py-2.5 px-2 text-center font-black font-mono text-lg text-amber-400">${j.posicion || (idx + 1)}</td>
-      
-      <!-- 2. JUGADOR OFICIAL (Compactado sin desborde) -->
       <td class="py-2.5 px-2 font-extrabold text-base text-white whitespace-nowrap max-w-[210px] truncate" title="${j.nombreJugador}">
         ${j.nombreJugador || '-'}
       </td>
-      
-      <!-- 3. HDCP -->
       <td class="py-2.5 px-2 text-center font-mono text-amber-300 font-black text-base whitespace-nowrap">+${j.hdcp || 0}</td>
-      
-      <!-- 4. PROM SCRATCH -->
       <td class="py-2.5 px-2 text-center font-mono text-emerald-400 font-black text-lg whitespace-nowrap">${promTruncado}</td>
-      
-      <!-- 5. L1 a L8 (Espaciado reducido) -->
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l1 || '-'}</td>
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l2 || '-'}</td>
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l3 || '-'}</td>
@@ -228,11 +206,7 @@ function renderTableCat2() {
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l6 || '-'}</td>
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l7 || '-'}</td>
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l8 || '-'}</td>
-      
-      <!-- 13. TOTAL SCRATCH (Pegado y compacto) -->
       <td class="py-2.5 px-2.5 text-right font-mono font-extrabold text-gray-100 text-base whitespace-nowrap">${Number(j.totScratch || 0).toLocaleString()}</td>
-      
-      <!-- 14. TOTAL GENERAL C/HDCP -->
       <td class="py-2.5 px-3 text-right font-mono font-black text-amber-400 text-xl bg-amber-500/10 whitespace-nowrap">
         ${Number(j.totHdcp || 0).toLocaleString()}
       </td>
@@ -274,6 +248,7 @@ function populateDetailSelect() {
   });
 }
 
+/* RENDER FICHA X EQUIPO (SIN CAT NI HDCP, MÁXIMA COMPACTACIÓN) */
 function renderEquipoDetailContent() {
   const container = document.getElementById('containerEquipoDetailContent');
   const select = document.getElementById('selectDetailEquipo');
@@ -285,38 +260,51 @@ function renderEquipoDetailContent() {
 
   container.innerHTML = `
     <div class="space-y-4 text-white">
-      <div class="grid grid-cols-4 gap-4 bg-[#0A0E17] p-4 rounded-xl border border-brand-border">
-        <div><span class="text-xs text-gray-400">Posición</span><p class="text-2xl font-black text-amber-400">#${eq.posicion}</p></div>
-        <div><span class="text-xs text-gray-400">HDCP Equipo</span><p class="text-2xl font-black text-white">+${eq.hdcpEquipo}</p></div>
-        <div><span class="text-xs text-gray-400">HDCP Baker</span><p class="text-2xl font-black text-white">+${eq.hdcpBaker}</p></div>
-        <div><span class="text-xs text-gray-400">Total c/HDCP</span><p class="text-2xl font-black text-emerald-400">${Number(eq.granTotHdcp).toLocaleString()}</p></div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#0A0E17] p-3 rounded-xl border border-brand-border">
+        <div><span class="text-[11px] text-gray-400 font-bold uppercase">Posición</span><p class="text-2xl font-black text-amber-400">#${eq.posicion}</p></div>
+        <div><span class="text-[11px] text-gray-400 font-bold uppercase">HDCP Equipo</span><p class="text-2xl font-black text-white">+${eq.hdcpEquipo}</p></div>
+        <div><span class="text-[11px] text-gray-400 font-bold uppercase">HDCP Baker</span><p class="text-2xl font-black text-white">+${eq.hdcpBaker}</p></div>
+        <div><span class="text-[11px] text-gray-400 font-bold uppercase">Total c/HDCP</span><p class="text-2xl font-black text-emerald-400">${Number(eq.granTotHdcp).toLocaleString()}</p></div>
       </div>
-      <table class="w-full text-left text-base">
-        <thead class="bg-[#0A0E17] text-gray-400 font-mono text-xs uppercase">
-          <tr>
-            <th class="py-2 px-3">Jugador</th>
-            <th class="py-2 px-2 text-center">Cat</th>
-            <th class="py-2 px-2 text-center">HDCP</th>
-            <th class="py-2 px-2 text-center">L1</th><th class="py-2 px-2 text-center">L2</th><th class="py-2 px-2 text-center">L3</th><th class="py-2 px-2 text-center">L4</th>
-            <th class="py-2 px-2 text-center">L5</th><th class="py-2 px-2 text-center">L6</th><th class="py-2 px-2 text-center">L7</th><th class="py-2 px-2 text-center">L8</th>
-            <th class="py-2 px-3 text-right">Total</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-brand-border/40 font-bold">
-          ${(eq.jugadores || []).map(j => `
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-[#0A0E17] text-gray-300 font-mono text-xs uppercase border-b border-brand-border">
             <tr>
-              <td class="py-3 px-3 text-white">${j.nombreJugador}</td>
-              <td class="py-3 px-2 text-center text-xs text-gray-400">${j.categoria}</td>
-              <td class="py-3 px-2 text-center text-amber-300">+${j.hdcp}</td>
-              <td class="py-3 px-2 text-center">${j.lineas?.l1 || 0}</td><td class="py-3 px-2 text-center">${j.lineas?.l2 || 0}</td>
-              <td class="py-3 px-2 text-center">${j.lineas?.l3 || 0}</td><td class="py-3 px-2 text-center">${j.lineas?.l4 || 0}</td>
-              <td class="py-3 px-2 text-center">${j.lineas?.l5 || 0}</td><td class="py-3 px-2 text-center">${j.lineas?.l6 || 0}</td>
-              <td class="py-3 px-2 text-center">${j.lineas?.l7 || 0}</td><td class="py-3 px-2 text-center">${j.lineas?.l8 || 0}</td>
-              <td class="py-3 px-3 text-right text-amber-400 font-mono text-xl">${j.totHdcp}</td>
+              <th class="py-2.5 px-2 font-black whitespace-nowrap">JUGADOR</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L1</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L2</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L3</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L4</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L5</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L6</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L7</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L8</th>
+              <th class="py-2.5 px-3 text-right text-amber-400 font-black whitespace-nowrap">TOTAL C/HDCP</th>
             </tr>
-          `).join('')}
-        </tbody>
-      </table>
+          </thead>
+          <tbody class="divide-y divide-brand-border/40 font-bold">
+            ${(eq.jugadores || []).map(j => `
+              <tr class="hover:bg-[#1E2C4A]">
+                <td class="py-2.5 px-2 text-white font-extrabold whitespace-nowrap max-w-[200px] truncate" title="${j.nombreJugador}">
+                  ${j.nombreJugador}
+                </td>
+                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l1 || 0}</td>
+                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l2 || 0}</td>
+                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l3 || 0}</td>
+                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l4 || 0}</td>
+                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l5 || 0}</td>
+                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l6 || 0}</td>
+                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l7 || 0}</td>
+                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l8 || 0}</td>
+                <td class="py-2.5 px-3 text-right text-amber-400 font-mono text-lg font-black whitespace-nowrap bg-amber-500/5">
+                  ${Number(j.totHdcp || 0).toLocaleString()}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
     </div>
   `;
 }
@@ -353,7 +341,7 @@ function switchView(viewName) {
     }
   });
 
-  const titles = { equipos: 'CUARTETAS (EQUIPOS)', cat1: 'INDIVIDUAL CATEGORÍA 1', cat2: 'INDIVIDUAL CATEGORÍA 2', premios: 'PREMIOS ESPECIALES', equipoDetail: 'FICHA POR EQUIPO' };
+  const titles = { equipos: 'CUARTETAS (EQUIPOS)', cat1: 'INDIVIDUAL CATEGORÍA 1', cat2: 'INDIVIDUAL CATEGORÍA 2', premios: 'PREMIOS ESPECIALES', equipoDetail: 'FICHA X EQUIPO' };
   if (currentViewBadge) currentViewBadge.innerText = titles[viewName] || viewName.toUpperCase();
 }
 

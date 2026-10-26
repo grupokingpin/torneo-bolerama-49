@@ -90,30 +90,30 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="flex-1 p-4 flex flex-col space-y-4 max-w-[1920px] w-full mx-auto">
 
-    <!-- KPIs TV -->
+    <!-- KPIs TV CON TÍTULOS AJUSTADOS -->
     <section class="grid grid-cols-2 md:grid-cols-5 gap-3">
       <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-[11px] uppercase font-black text-gray-400">Promedio Liga</span>
+        <span class="text-[11px] uppercase font-black text-gray-400">Promedio Liga (Scratch)</span>
         <span id="kpiPromedioGeneral" class="text-3xl font-display font-black text-white">0.0</span>
         <span class="text-[10px] text-gray-400">Pinos: <strong id="kpiTotalPinos" class="text-white">0</strong></span>
       </div>
       <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-[11px] uppercase font-black text-red-400">Tiro Mayor Eq</span>
+        <span class="text-[11px] uppercase font-black text-red-400">Tiro Mayor Eq c/Hdcp</span>
         <span id="kpiTiroMayorEqScore" class="text-3xl font-display font-black text-white">0</span>
         <p id="kpiTiroMayorEqName" class="text-[10px] font-black text-amber-400 truncate">-</p>
       </div>
       <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-[11px] uppercase font-black text-red-400">Serie Mayor Eq</span>
+        <span class="text-[11px] uppercase font-black text-red-400">Serie Mayor Eq c/Hdcp</span>
         <span id="kpiSerieMayorEqScore" class="text-3xl font-display font-black text-white">0</span>
         <p id="kpiSerieMayorEqName" class="text-[10px] font-black text-amber-400 truncate">-</p>
       </div>
       <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-[11px] uppercase font-black text-amber-400">Tiro Mayor Ind</span>
+        <span class="text-[11px] uppercase font-black text-amber-400">Tiro Mayor Ind c/Hdcp</span>
         <span id="kpiTiroMayorIndScore" class="text-3xl font-display font-black text-white">0</span>
         <p id="kpiTiroMayorIndName" class="text-[10px] font-black text-amber-400 truncate">-</p>
       </div>
       <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between col-span-2 md:col-span-1">
-        <span class="text-[11px] uppercase font-black text-amber-400">Serie Mayor Ind</span>
+        <span class="text-[11px] uppercase font-black text-amber-400">Serie Mayor Ind c/Hdcp</span>
         <span id="kpiSerieMayorIndScore" class="text-3xl font-display font-black text-white">0</span>
         <p id="kpiSerieMayorIndName" class="text-[10px] font-black text-amber-400 truncate">-</p>
       </div>
@@ -138,7 +138,7 @@
       </button>
     </div>
 
-    <!-- PANTALLA 1: CUARTETAS TV -->
+    <!-- PANTALLA 1: CUARTETAS TV (SIN HDCP EQ NI HDCP LB) -->
     <div id="viewEquipos" class="fade-in flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Clasificación Cuartetas — Tabla General de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
@@ -147,8 +147,6 @@
             <tr>
               <th class="py-3 px-2 text-center w-10 font-black">POS</th>
               <th class="py-3 px-3 font-black whitespace-nowrap">EQUIPO</th>
-              <th class="py-3 px-2 text-center text-amber-400 font-black">HDCP EQ</th>
-              <th class="py-3 px-2 text-center text-amber-400 font-black">HDCP LB</th>
               <th class="py-3 px-2 text-right font-black">SCRATCH VIE</th>
               <th class="py-3 px-2 text-center font-black text-amber-300">LB1</th>
               <th class="py-3 px-3 text-right font-black text-gray-100">TOT VIE C/HDCP</th>
@@ -165,7 +163,7 @@
       </div>
     </div>
 
-    <!-- PANTALLA 2: INDIVIDUAL CAT 1 TV (14 COLUMNAS EXACTAS) -->
+    <!-- PANTALLA 2: INDIVIDUAL CAT 1 TV -->
     <div id="viewCat1" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Individual Categoría 1 — Tabla de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
@@ -194,7 +192,7 @@
       </div>
     </div>
 
-    <!-- PANTALLA 3: INDIVIDUAL CAT 2 TV (14 COLUMNAS EXACTAS) -->
+    <!-- PANTALLA 3: INDIVIDUAL CAT 2 TV -->
     <div id="viewCat2" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Individual Categoría 2 — Tabla de Posiciones</h2>
       <div class="overflow-x-auto flex-1">

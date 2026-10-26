@@ -1,6 +1,6 @@
 /**
- * BOLERAMA COYOACAN • TORNEO 49 ANIVERSARIO 2026
- * TV Display & Data Engine (Alineación Cuartetas sin HDCPs en tabla general)
+ * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
+ * TV Display & Data Engine (Compactación Máxima Individual)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -109,7 +109,7 @@ function renderPerfectGameAlert() {
   }
 }
 
-/* RENDER TV CUARTETAS (SIN COLUMNAS HDCP EQ NI HDCP LB) */
+/* RENDER TV CUARTETAS (TABLA COMPACTA) */
 function renderTableEquipos() {
   const tbody = document.getElementById('tbodyEquipos');
   if (!tbody) return;
@@ -122,36 +122,17 @@ function renderTableEquipos() {
     row.className = 'bg-[#18233A] text-white text-lg font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <!-- 1. POS -->
       <td class="py-3 px-2 text-center font-black font-mono text-xl text-amber-400">${eq.posicion || (idx + 1)}</td>
-      
-      <!-- 2. EQUIPO -->
       <td class="py-3 px-3 font-extrabold text-xl text-white whitespace-nowrap">${eq.nombreEquipo || '-'}</td>
-      
-      <!-- 3. SCRATCH VIE -->
       <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchVie || 0).toLocaleString()}</td>
-      
-      <!-- 4. LB1 -->
       <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerVie || '-'}</td>
-      
-      <!-- 5. TOT VIE C/HDCP -->
       <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(eq.totVieHdcp || 0).toLocaleString()}</td>
-      
-      <!-- 6. SCRATCH SÁB -->
       <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchSab || 0).toLocaleString()}</td>
-      
-      <!-- 7. LB2 -->
       <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerSab || '-'}</td>
-      
-      <!-- 8. TOT SÁB C/HDCP -->
       <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(eq.totSabHdcp || 0).toLocaleString()}</td>
-      
-      <!-- 9. TOTAL GENERAL C/HDCP -->
       <td class="py-3 px-4 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
         ${Number(eq.granTotHdcp || 0).toLocaleString()}
       </td>
-      
-      <!-- 10. ESTADO -->
       <td class="py-3 px-3 text-center text-xs font-black ${idx < 2 ? 'text-amber-400' : 'text-emerald-400'}">
         ${estado}
       </td>
@@ -160,7 +141,7 @@ function renderTableEquipos() {
   });
 }
 
-/* RENDER TV INDIVIDUAL CAT 1 (14 COLUMNAS) */
+/* RENDER TV INDIVIDUAL CAT 1 (COMPACTACIÓN DE COLUMNAS) */
 function renderTableCat1() {
   const tbody = document.getElementById('tbodyCat1');
   if (!tbody) return;
@@ -171,23 +152,38 @@ function renderTableCat1() {
     const promTruncado = Math.floor(Number(j.promedioTorneo || 0));
 
     const row = document.createElement('tr');
-    row.className = 'bg-[#18233A] text-white text-lg font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
+    row.className = 'bg-[#18233A] text-white font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <td class="py-3 px-2 text-center font-black font-mono text-xl text-amber-400">${j.posicion || (idx + 1)}</td>
-      <td class="py-3 px-3 font-extrabold text-xl text-white whitespace-nowrap">${j.nombreJugador || '-'}</td>
-      <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">+${j.hdcp || 0}</td>
-      <td class="py-3 px-2 text-center font-mono text-emerald-400 font-black text-xl">${promTruncado}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l1 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l2 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l3 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l4 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l5 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l6 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l7 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l8 || '-'}</td>
-      <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(j.totScratch || 0).toLocaleString()}</td>
-      <td class="py-3 px-4 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
+      <!-- 1. POS -->
+      <td class="py-2.5 px-2 text-center font-black font-mono text-lg text-amber-400">${j.posicion || (idx + 1)}</td>
+      
+      <!-- 2. JUGADOR OFICIAL (Compactado sin desborde) -->
+      <td class="py-2.5 px-2 font-extrabold text-base text-white whitespace-nowrap max-w-[210px] truncate" title="${j.nombreJugador}">
+        ${j.nombreJugador || '-'}
+      </td>
+      
+      <!-- 3. HDCP -->
+      <td class="py-2.5 px-2 text-center font-mono text-amber-300 font-black text-base whitespace-nowrap">+${j.hdcp || 0}</td>
+      
+      <!-- 4. PROM SCRATCH -->
+      <td class="py-2.5 px-2 text-center font-mono text-emerald-400 font-black text-lg whitespace-nowrap">${promTruncado}</td>
+      
+      <!-- 5. L1 a L8 (Espaciado reducido) -->
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l1 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l2 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l3 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l4 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l5 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l6 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l7 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l8 || '-'}</td>
+      
+      <!-- 13. TOTAL SCRATCH (Pegado y compacto) -->
+      <td class="py-2.5 px-2.5 text-right font-mono font-extrabold text-gray-100 text-base whitespace-nowrap">${Number(j.totScratch || 0).toLocaleString()}</td>
+      
+      <!-- 14. TOTAL GENERAL C/HDCP -->
+      <td class="py-2.5 px-3 text-right font-mono font-black text-amber-400 text-xl bg-amber-500/10 whitespace-nowrap">
         ${Number(j.totHdcp || 0).toLocaleString()}
       </td>
     `;
@@ -195,7 +191,7 @@ function renderTableCat1() {
   });
 }
 
-/* RENDER TV INDIVIDUAL CAT 2 (14 COLUMNAS) */
+/* RENDER TV INDIVIDUAL CAT 2 (COMPACTACIÓN DE COLUMNAS) */
 function renderTableCat2() {
   const tbody = document.getElementById('tbodyCat2');
   if (!tbody) return;
@@ -206,23 +202,38 @@ function renderTableCat2() {
     const promTruncado = Math.floor(Number(j.promedioTorneo || 0));
 
     const row = document.createElement('tr');
-    row.className = 'bg-[#18233A] text-white text-lg font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
+    row.className = 'bg-[#18233A] text-white font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <td class="py-3 px-2 text-center font-black font-mono text-xl text-amber-400">${j.posicion || (idx + 1)}</td>
-      <td class="py-3 px-3 font-extrabold text-xl text-white whitespace-nowrap">${j.nombreJugador || '-'}</td>
-      <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">+${j.hdcp || 0}</td>
-      <td class="py-3 px-2 text-center font-mono text-emerald-400 font-black text-xl">${promTruncado}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l1 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l2 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l3 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l4 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l5 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l6 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l7 || '-'}</td>
-      <td class="py-3 px-1 text-center font-mono text-gray-300">${l.l8 || '-'}</td>
-      <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(j.totScratch || 0).toLocaleString()}</td>
-      <td class="py-3 px-4 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
+      <!-- 1. POS -->
+      <td class="py-2.5 px-2 text-center font-black font-mono text-lg text-amber-400">${j.posicion || (idx + 1)}</td>
+      
+      <!-- 2. JUGADOR OFICIAL (Compactado sin desborde) -->
+      <td class="py-2.5 px-2 font-extrabold text-base text-white whitespace-nowrap max-w-[210px] truncate" title="${j.nombreJugador}">
+        ${j.nombreJugador || '-'}
+      </td>
+      
+      <!-- 3. HDCP -->
+      <td class="py-2.5 px-2 text-center font-mono text-amber-300 font-black text-base whitespace-nowrap">+${j.hdcp || 0}</td>
+      
+      <!-- 4. PROM SCRATCH -->
+      <td class="py-2.5 px-2 text-center font-mono text-emerald-400 font-black text-lg whitespace-nowrap">${promTruncado}</td>
+      
+      <!-- 5. L1 a L8 (Espaciado reducido) -->
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l1 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l2 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l3 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l4 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l5 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l6 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l7 || '-'}</td>
+      <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l8 || '-'}</td>
+      
+      <!-- 13. TOTAL SCRATCH (Pegado y compacto) -->
+      <td class="py-2.5 px-2.5 text-right font-mono font-extrabold text-gray-100 text-base whitespace-nowrap">${Number(j.totScratch || 0).toLocaleString()}</td>
+      
+      <!-- 14. TOTAL GENERAL C/HDCP -->
+      <td class="py-2.5 px-3 text-right font-mono font-black text-amber-400 text-xl bg-amber-500/10 whitespace-nowrap">
         ${Number(j.totHdcp || 0).toLocaleString()}
       </td>
     `;

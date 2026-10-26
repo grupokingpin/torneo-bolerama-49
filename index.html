@@ -134,7 +134,7 @@
         🏆 Premios
       </button>
       <button onclick="switchView('equipoDetail')" id="tabEquipoDetail" class="px-4 py-2 rounded-lg font-display font-black uppercase text-sm bg-[#131B2E] text-cyan-400 border border-cyan-500/30">
-        🔍 Ficha x Equipo (QR)
+        🔍 Ficha x Equipo
       </button>
     </div>
 
@@ -163,7 +163,7 @@
       </div>
     </div>
 
-    <!-- PANTALLA 2: INDIVIDUAL CAT 1 TV (COMPACTADA Y PROM SCRATCH) -->
+    <!-- PANTALLA 2: INDIVIDUAL CAT 1 TV -->
     <div id="viewCat1" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Individual Categoría 1 — Tabla de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
@@ -192,7 +192,7 @@
       </div>
     </div>
 
-    <!-- PANTALLA 3: INDIVIDUAL CAT 2 TV (COMPACTADA Y PROM SCRATCH) -->
+    <!-- PANTALLA 3: INDIVIDUAL CAT 2 TV -->
     <div id="viewCat2" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Individual Categoría 2 — Tabla de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
@@ -227,11 +227,11 @@
       <div id="containerPremiosGrid" class="grid grid-cols-1 md:grid-cols-4 gap-4"></div>
     </div>
 
-    <!-- PANTALLA 5: FICHA QR -->
-    <div id="viewEquipoDetail" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-6 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-brand-border pb-4 mb-4">
-        <h2 class="text-2xl font-display font-black uppercase text-cyan-400">Consulta Ficha x Equipo</h2>
-        <select id="selectDetailEquipo" class="bg-[#0A0E17] border border-cyan-500 text-white px-4 py-2 rounded-xl font-bold"></select>
+    <!-- PANTALLA 5: FICHA X EQUIPO (COMPACTA) -->
+    <div id="viewEquipoDetail" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 md:p-6 shadow-2xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brand-border pb-4 mb-4 gap-3">
+        <h2 class="text-xl md:text-2xl font-display font-black uppercase text-cyan-400">Consulta Ficha x Equipo</h2>
+        <select id="selectDetailEquipo" class="bg-[#0A0E17] border border-cyan-500 text-white px-4 py-2 rounded-xl font-bold text-sm"></select>
       </div>
       <div id="containerEquipoDetailContent"></div>
     </div>

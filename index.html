@@ -90,7 +90,7 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="flex-1 p-4 flex flex-col space-y-4 max-w-[1920px] w-full mx-auto">
 
-    <!-- KPIs TV CON TÍTULOS AJUSTADOS -->
+    <!-- KPIs TV -->
     <section class="grid grid-cols-2 md:grid-cols-5 gap-3">
       <div class="bg-[#131B2E] border border-brand-border rounded-xl p-3 flex flex-col justify-between">
         <span class="text-[11px] uppercase font-black text-gray-400">Promedio Liga (Scratch)</span>
@@ -138,7 +138,7 @@
       </button>
     </div>
 
-    <!-- PANTALLA 1: CUARTETAS TV (SIN HDCP EQ NI HDCP LB) -->
+    <!-- PANTALLA 1: CUARTETAS TV -->
     <div id="viewEquipos" class="fade-in flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Clasificación Cuartetas — Tabla General de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
@@ -163,27 +163,27 @@
       </div>
     </div>
 
-    <!-- PANTALLA 2: INDIVIDUAL CAT 1 TV -->
+    <!-- PANTALLA 2: INDIVIDUAL CAT 1 TV (COMPACTADA Y PROM SCRATCH) -->
     <div id="viewCat1" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Individual Categoría 1 — Tabla de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
         <table class="w-full text-left">
           <thead class="bg-[#0A0E17] text-gray-300 font-mono text-xs uppercase border-b border-brand-border">
             <tr>
-              <th class="py-3 px-2 text-center font-black w-10">POS</th>
-              <th class="py-3 px-3 font-black whitespace-nowrap">JUGADOR OFICIAL</th>
-              <th class="py-3 px-2 text-center text-amber-400 font-black">HDCP</th>
-              <th class="py-3 px-2 text-center font-black">PROMEDIO</th>
-              <th class="py-3 px-1 text-center font-black">L1</th>
-              <th class="py-3 px-1 text-center font-black">L2</th>
-              <th class="py-3 px-1 text-center font-black">L3</th>
-              <th class="py-3 px-1 text-center font-black">L4</th>
-              <th class="py-3 px-1 text-center font-black">L5</th>
-              <th class="py-3 px-1 text-center font-black">L6</th>
-              <th class="py-3 px-1 text-center font-black">L7</th>
-              <th class="py-3 px-1 text-center font-black">L8</th>
-              <th class="py-3 px-3 text-right font-black">TOTAL SCRATCH</th>
-              <th class="py-3 px-4 text-right text-amber-400 font-black">TOTAL GENERAL C/HDCP</th>
+              <th class="py-2.5 px-2 text-center font-black w-8">POS</th>
+              <th class="py-2.5 px-2 font-black whitespace-nowrap">JUGADOR OFICIAL</th>
+              <th class="py-2.5 px-2 text-center text-amber-400 font-black whitespace-nowrap">HDCP</th>
+              <th class="py-2.5 px-2 text-center font-black whitespace-nowrap">PROM SCRATCH</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L1</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L2</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L3</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L4</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L5</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L6</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L7</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L8</th>
+              <th class="py-2.5 px-2.5 text-right font-black whitespace-nowrap">TOTAL SCRATCH</th>
+              <th class="py-2.5 px-3 text-right text-amber-400 font-black whitespace-nowrap">TOTAL GENERAL C/HDCP</th>
             </tr>
           </thead>
           <tbody id="tbodyCat1" class="divide-y divide-brand-border/60">
@@ -192,27 +192,27 @@
       </div>
     </div>
 
-    <!-- PANTALLA 3: INDIVIDUAL CAT 2 TV -->
+    <!-- PANTALLA 3: INDIVIDUAL CAT 2 TV (COMPACTADA Y PROM SCRATCH) -->
     <div id="viewCat2" class="fade-in hidden flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Individual Categoría 2 — Tabla de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
         <table class="w-full text-left">
           <thead class="bg-[#0A0E17] text-gray-300 font-mono text-xs uppercase border-b border-brand-border">
             <tr>
-              <th class="py-3 px-2 text-center font-black w-10">POS</th>
-              <th class="py-3 px-3 font-black whitespace-nowrap">JUGADOR OFICIAL</th>
-              <th class="py-3 px-2 text-center text-amber-400 font-black">HDCP</th>
-              <th class="py-3 px-2 text-center font-black">PROMEDIO</th>
-              <th class="py-3 px-1 text-center font-black">L1</th>
-              <th class="py-3 px-1 text-center font-black">L2</th>
-              <th class="py-3 px-1 text-center font-black">L3</th>
-              <th class="py-3 px-1 text-center font-black">L4</th>
-              <th class="py-3 px-1 text-center font-black">L5</th>
-              <th class="py-3 px-1 text-center font-black">L6</th>
-              <th class="py-3 px-1 text-center font-black">L7</th>
-              <th class="py-3 px-1 text-center font-black">L8</th>
-              <th class="py-3 px-3 text-right font-black">TOTAL SCRATCH</th>
-              <th class="py-3 px-4 text-right text-amber-400 font-black">TOTAL GENERAL C/HDCP</th>
+              <th class="py-2.5 px-2 text-center font-black w-8">POS</th>
+              <th class="py-2.5 px-2 font-black whitespace-nowrap">JUGADOR OFICIAL</th>
+              <th class="py-2.5 px-2 text-center text-amber-400 font-black whitespace-nowrap">HDCP</th>
+              <th class="py-2.5 px-2 text-center font-black whitespace-nowrap">PROM SCRATCH</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L1</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L2</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L3</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L4</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L5</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L6</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L7</th>
+              <th class="py-2.5 px-1.5 text-center font-black">L8</th>
+              <th class="py-2.5 px-2.5 text-right font-black whitespace-nowrap">TOTAL SCRATCH</th>
+              <th class="py-2.5 px-3 text-right text-amber-400 font-black whitespace-nowrap">TOTAL GENERAL C/HDCP</th>
             </tr>
           </thead>
           <tbody id="tbodyCat2" class="divide-y divide-brand-border/60">

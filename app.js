@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Premios 100% Dinámicos de Google Sheets)
+ * TV Display & Data Engine (Corrección Cintillo 300 y Premios Dinámicos)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -80,22 +80,14 @@ function renderKPIs() {
   if (elemSerieIndName) elemSerieIndName.innerText = serieInd.nombreJugador || '-';
 }
 
+/**
+ * CINTILLO AMARILLO SUPERIOR:
+ * Solo se muestra si alguien realmente tiró 300 en la hoja de Captura (perfectGames.length > 0)
+ * Si nadie ha tirado 300, se oculta inmediatamente.
+ */
 function renderPerfectGameAlert() {
   const alertBox = document.getElementById('perfectGameAlert');
   if (!alertBox) return;
-
-  // Si en la hoja de Premios cambiaron el nombre del jugador del 300, lo mostramos
-  const p300 = tournamentData.tableroPremios?.juegoPerfecto;
-  if (p300 && p300.jugador && p300.jugador.trim() !== '') {
-    const elemP = document.getElementById('perfectGamePlayer');
-    if (elemP) elemP.innerText = p300.jugador;
-    const elemT = document.getElementById('perfectGameTeam');
-    if (elemT) elemT.innerText = p300.equipo || 'Bolerama Coyoacan';
-    const elemL = document.getElementById('perfectGameLine');
-    if (elemL) elemL.innerText = `Línea 1 (${p300.dia || 'Viernes'})`;
-    alertBox.classList.remove('hidden');
-    return;
-  }
 
   if (tournamentData.perfectGames && tournamentData.perfectGames.length > 0) {
     const pg = tournamentData.perfectGames[0];
@@ -107,6 +99,7 @@ function renderPerfectGameAlert() {
     if (elemL) elemL.innerText = `${pg.linea} (${pg.dia})`;
     alertBox.classList.remove('hidden');
   } else {
+    // Nadie ha tirado 300: se oculta el cintillo
     alertBox.classList.add('hidden');
   }
 }
@@ -268,7 +261,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS 100% DINÁMICO DESDE GOOGLE SHEETS */
+/* RENDER TABLERO OFICIAL DE PREMIOS 100% DINÁMICO */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -284,6 +277,11 @@ function renderTableroPremiosDinamico() {
   const c2 = tp.cat2 || {};
   const jp = tp.juegoPerfecto || {};
   const pases = tp.pases || {};
+
+  // Formato para Ganador del 300: Si dice Pendiente, no inventar nombre ni equipo
+  const ganador300Texto = (jp.jugador && !jp.jugador.includes('Pendiente')) 
+    ? `<span class="text-emerald-400 underline">${jp.jugador}</span> • <span class="text-gray-300">${jp.equipo || 'Bolerama Coyoacan'}</span>`
+    : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;
 
   container.innerHTML = `
     <!-- ENCABEZADO OFICIAL DE BOLSA -->
@@ -434,7 +432,7 @@ function renderTableroPremiosDinamico() {
 
     </div>
 
-    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) DINÁMICO (MONTO Y GANADOR) -->
+    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) DINÁMICO DESDE GOOGLE SHEETS -->
     <div class="bg-gradient-to-r from-amber-950/40 via-[#131B2E] to-amber-950/40 border-2 border-amber-500/50 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
       <div class="flex items-center space-x-4">
         <div class="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center font-display text-3xl font-black text-black shadow-lg">
@@ -443,9 +441,9 @@ function renderTableroPremiosDinamico() {
         <div>
           <span class="text-xs font-black uppercase text-amber-400 tracking-wider">PREMIO AL PRIMER JUEGO PERFECTO (LÍNEA 300 SCRATCH)</span>
           <h3 class="text-xl md:text-2xl font-black text-white mt-0.5">
-            Ganador: <span class="text-emerald-400 underline">${jp.jugador || 'Eugenio San ciprián'}</span> • <span class="text-gray-300">${jp.equipo || 'Bolerama Coyoacan'}</span>
+            Ganador: ${ganador300Texto}
           </h3>
-          <p class="text-xs text-gray-400 mt-1">Registrado en Línea 1 • ${jp.dia || 'Viernes 30 Oct'} • Avalado Oficial</p>
+          <p class="text-xs text-gray-400 mt-1">${jp.dia && jp.dia !== '-' ? `Registrado • ${jp.dia}` : 'Pendiente de Registro en Ronda Oficial'}</p>
         </div>
       </div>
       <div class="text-center md:text-right bg-[#0A0E17] border border-amber-500/40 px-6 py-3 rounded-2xl">
@@ -454,7 +452,7 @@ function renderTableroPremiosDinamico() {
       </div>
     </div>
 
-    <!-- SECCIÓN 3: CLASIFICADOS AL TORNEO DEL 300 / 800 (DICIEMBRE 2026) -->
+    <!-- SECCIÓN 3: CLASIFICADOS AL TORNEO DEL 300 / 800 -->
     <div class="bg-[#131B2E] border border-brand-border rounded-2xl p-5 shadow-2xl">
       <div class="border-b border-brand-border pb-3 mb-4">
         <h3 class="text-lg font-display font-black uppercase text-cyan-400 flex items-center space-x-2">

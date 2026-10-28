@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Premios 100% Alineados con Sheets)
+ * TV Display & Data Engine (Premios con Columnas Rígidas Sin Encimado)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -80,11 +80,6 @@ function renderKPIs() {
   if (elemSerieIndName) elemSerieIndName.innerText = serieInd.nombreJugador || '-';
 }
 
-/**
- * CINTILLO AMARILLO SUPERIOR (REGLA ESTRICTA):
- * SOLO se muestra si en la hoja de Captura se registró un tiro de 300 real (perfectGames.length > 0).
- * Si nadie ha tirado 300, se oculta inmediatamente.
- */
 function renderPerfectGameAlert() {
   const alertBox = document.getElementById('perfectGameAlert');
   if (!alertBox) return;
@@ -260,7 +255,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS (ALINEACIÓN EXACTA CON HOJA PREMIOS) */
+/* RENDER TABLERO OFICIAL DE PREMIOS (DISEÑO DE COLUMNAS RÍGIDAS SIN ENCIMADO) */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -314,6 +309,7 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
+          <!-- Podio -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
@@ -329,14 +325,37 @@ function renderTableroPremiosDinamico() {
             </tbody>
           </table>
 
+          <!-- MINI-TABLA RÍGIDA DE PREMIOS ESPECIALES CUARTETAS (CERO TRASLAPES) -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-red-400 mb-2">Premios Especiales c/HDCP</p>
-            <div class="space-y-1.5 text-xs">
-              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${eq.tiroVie?.equipo} (${eq.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${eq.tiroVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${eq.tiroSab?.equipo} (${eq.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${eq.tiroSab?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${eq.serieVie?.equipo} (${eq.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${eq.serieVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${eq.serieSab?.equipo} (${eq.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${eq.serieSab?.premio}</span></div></div>
-            </div>
+            <table class="w-full text-left text-xs">
+              <tbody class="divide-y divide-brand-border/30">
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Vie:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${eq.tiroVie?.equipo}">${eq.tiroVie?.equipo}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${eq.tiroVie?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${eq.tiroVie?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Sáb:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${eq.tiroSab?.equipo}">${eq.tiroSab?.equipo}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${eq.tiroSab?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${eq.tiroSab?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Vie:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${eq.serieVie?.equipo}">${eq.serieVie?.equipo}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${eq.serieVie?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${eq.serieVie?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Sáb:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${eq.serieSab?.equipo}">${eq.serieSab?.equipo}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${eq.serieSab?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${eq.serieSab?.premio}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -356,6 +375,7 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
+          <!-- Podio -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
@@ -371,14 +391,37 @@ function renderTableroPremiosDinamico() {
             </tbody>
           </table>
 
+          <!-- MINI-TABLA RÍGIDA DE PREMIOS ESPECIALES CAT 1 (CERO TRASLAPES) -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
-            <div class="space-y-1.5 text-xs">
-              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c1.tiroVie?.jugador} (${c1.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c1.tiroVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c1.tiroSab?.jugador} (${c1.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c1.tiroSab?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c1.serieVie?.jugador} (${c1.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c1.serieVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c1.serieSab?.jugador} (${c1.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c1.serieSab?.premio}</span></div></div>
-            </div>
+            <table class="w-full text-left text-xs">
+              <tbody class="divide-y divide-brand-border/30">
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Vie:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c1.tiroVie?.jugador}">${c1.tiroVie?.jugador}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c1.tiroVie?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c1.tiroVie?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Sáb:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c1.tiroSab?.jugador}">${c1.tiroSab?.jugador}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c1.tiroSab?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c1.tiroSab?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Vie:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c1.serieVie?.jugador}">${c1.serieVie?.jugador}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c1.serieVie?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c1.serieVie?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Sáb:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c1.serieSab?.jugador}">${c1.serieSab?.jugador}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c1.serieSab?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c1.serieSab?.premio}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -398,6 +441,7 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
+          <!-- Podio -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
@@ -413,14 +457,37 @@ function renderTableroPremiosDinamico() {
             </tbody>
           </table>
 
+          <!-- MINI-TABLA RÍGIDA DE PREMIOS ESPECIALES CAT 2 (CERO TRASLAPES) -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
-            <div class="space-y-1.5 text-xs">
-              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c2.tiroVie?.jugador} (${c2.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c2.tiroVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c2.tiroSab?.jugador} (${c2.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c2.tiroSab?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c2.serieVie?.jugador} (${c2.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c2.serieVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c2.serieSab?.jugador} (${c2.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c2.serieSab?.premio}</span></div></div>
-            </div>
+            <table class="w-full text-left text-xs">
+              <tbody class="divide-y divide-brand-border/30">
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Vie:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c2.tiroVie?.jugador}">${c2.tiroVie?.jugador}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c2.tiroVie?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c2.tiroVie?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Sáb:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c2.tiroSab?.jugador}">${c2.tiroSab?.jugador}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c2.tiroSab?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c2.tiroSab?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Vie:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c2.serieVie?.jugador}">${c2.serieVie?.jugador}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c2.serieVie?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c2.serieVie?.premio}</td>
+                </tr>
+                <tr>
+                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Sáb:</td>
+                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c2.serieSab?.jugador}">${c2.serieSab?.jugador}</td>
+                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c2.serieSab?.score})</td>
+                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c2.serieSab?.premio}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 

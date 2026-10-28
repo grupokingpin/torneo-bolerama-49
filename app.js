@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Cintillo 300 Estricto y Premios Dinámicos)
+ * TV Display & Data Engine (Sincronización Total con Hoja Premios)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -260,7 +260,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS DINÁMICO */
+/* RENDER TABLERO OFICIAL DE PREMIOS (100% FIEL A HOJA PREMIOS) */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -277,14 +277,11 @@ function renderTableroPremiosDinamico() {
   const jp = tp.juegoPerfecto || {};
   const pases = tp.pases || {};
 
-  // Validar si hay ganador de 300
+  // Formato para Ganador del 300
   const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente');
   const ganador300Texto = tieneGanador
-    ? `<span class="text-emerald-400 underline">${jp.jugador}</span> • <span class="text-gray-300">${jp.equipo || 'Bolerama Coyoacan'}</span>`
+    ? `<span class="text-emerald-400 underline font-extrabold">${jp.jugador}</span> • <span class="text-gray-200 font-bold">${jp.equipo || 'Bolerama Coyoacan'}</span>`
     : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;
-
-  // Monto del premio desde Sheets
-  const monto300 = (jp.premio && jp.premio.trim() !== '') ? jp.premio : '$80,000';
 
   container.innerHTML = `
     <!-- ENCABEZADO OFICIAL DE BOLSA -->
@@ -435,7 +432,7 @@ function renderTableroPremiosDinamico() {
 
     </div>
 
-    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) DINÁMICO DESDE GOOGLE SHEETS -->
+    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) DINÁMICO DE HOJA PREMIOS -->
     <div class="bg-gradient-to-r from-amber-950/40 via-[#131B2E] to-amber-950/40 border-2 border-amber-500/50 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
       <div class="flex items-center space-x-4">
         <div class="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center font-display text-3xl font-black text-black shadow-lg">
@@ -451,7 +448,7 @@ function renderTableroPremiosDinamico() {
       </div>
       <div class="text-center md:text-right bg-[#0A0E17] border border-amber-500/40 px-6 py-3 rounded-2xl">
         <span class="text-[11px] font-bold text-gray-400 uppercase">Bolsa Entregada</span>
-        <p class="text-3xl font-mono font-black text-amber-400">${monto300}</p>
+        <p class="text-3xl font-mono font-black text-amber-400">${jp.premio || '$80,000'}</p>
       </div>
     </div>
 
@@ -471,10 +468,10 @@ function renderTableroPremiosDinamico() {
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-amber-400 mb-2">Cuarteta Campeona (4 Pases)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
-            <p>• Titular 1: <span class="text-gray-400">${pases.cuarteta?.[0] || '(Pendiente de Gran Final)'}</span></p>
-            <p>• Titular 2: <span class="text-gray-400">${pases.cuarteta?.[1] || '(Pendiente de Gran Final)'}</span></p>
-            <p>• Titular 3: <span class="text-gray-400">${pases.cuarteta?.[2] || '(Pendiente de Gran Final)'}</span></p>
-            <p>• Titular 4: <span class="text-gray-400">${pases.cuarteta?.[3] || '(Pendiente de Gran Final)'}</span></p>
+            <p>• Titular 1: <span class="text-gray-400">${pases.cuarteta?.[0]}</span></p>
+            <p>• Titular 2: <span class="text-gray-400">${pases.cuarteta?.[1]}</span></p>
+            <p>• Titular 3: <span class="text-gray-400">${pases.cuarteta?.[2]}</span></p>
+            <p>• Titular 4: <span class="text-gray-400">${pases.cuarteta?.[3]}</span></p>
           </div>
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
@@ -483,8 +480,8 @@ function renderTableroPremiosDinamico() {
           <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 1 (1 Pase)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
             <p class="text-sm font-black text-white">Jugador Ganador:</p>
-            <p class="text-gray-400">${pases.cat1?.jugador || '(Pendiente de Final Cat 1)'}</p>
-            <p class="text-emerald-400 font-bold mt-2">Pase Oficial: ${pases.cat1?.pase || 'En espera de definición'}</p>
+            <p class="text-gray-400">${pases.cat1?.jugador}</p>
+            <p class="text-emerald-400 font-bold mt-2">Pase Oficial: ${pases.cat1?.pase}</p>
           </div>
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
@@ -493,8 +490,8 @@ function renderTableroPremiosDinamico() {
           <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 2 (1 Pase)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
             <p class="text-sm font-black text-white">Jugador Ganador:</p>
-            <p class="text-gray-400">${pases.cat2?.jugador || '(Pendiente de Final Cat 2)'}</p>
-            <p class="text-emerald-400 font-bold mt-2">Pase Oficial: ${pases.cat2?.pase || 'En espera de definición'}</p>
+            <p class="text-gray-400">${pases.cat2?.jugador}</p>
+            <p class="text-emerald-400 font-bold mt-2">Pase Oficial: ${pases.cat2?.pase}</p>
           </div>
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>

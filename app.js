@@ -1,32 +1,20 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Ficha x Equipo Compacta)
+ * TV Display & Data Engine (Sin Rotación & Estatus Buffet)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
 
-const CAROUSEL_INTERVAL_SEC = 30;
-let carouselTimer = CAROUSEL_INTERVAL_SEC;
-let isPaused = false;
-let currentViewIndex = 0;
-const views = ['equipos', 'cat1', 'cat2'];
-
 let tournamentData = { equipos: [], cat1: [], cat2: [], stats: {}, premios: {}, perfectGames: [] };
 
-const timerElem = document.getElementById('carouselTimer');
-const progressBar = document.getElementById('carouselProgressBar');
 const currentViewBadge = document.getElementById('currentViewBadge');
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchTournamentData();
-  initCarousel();
   initCaptureModal();
 
   const refreshBtn = document.getElementById('btnManualRefresh');
   if (refreshBtn) refreshBtn.addEventListener('click', () => fetchTournamentData(true));
-  
-  const pauseBtn = document.getElementById('btnPauseCarousel');
-  if (pauseBtn) pauseBtn.addEventListener('click', togglePauseCarousel);
 
   const detailSelect = document.getElementById('selectDetailEquipo');
   if (detailSelect) detailSelect.addEventListener('change', renderEquipoDetailContent);
@@ -109,7 +97,7 @@ function renderPerfectGameAlert() {
   }
 }
 
-/* RENDER TV CUARTETAS */
+/* RENDER CUARTETAS */
 function renderTableEquipos() {
   const tbody = document.getElementById('tbodyEquipos');
   if (!tbody) return;
@@ -141,7 +129,7 @@ function renderTableEquipos() {
   });
 }
 
-/* RENDER TV INDIVIDUAL CAT 1 */
+/* RENDER INDIVIDUAL CAT 1 CON ESTATUS BUFFET */
 function renderTableCat1() {
   const tbody = document.getElementById('tbodyCat1');
   if (!tbody) return;
@@ -150,12 +138,27 @@ function renderTableCat1() {
   (tournamentData.cat1 || []).forEach((j, idx) => {
     const l = j.lineas || {};
     const promTruncado = Math.floor(Number(j.promedioTorneo || 0));
+    const pos = j.posicion || (idx + 1);
+
+    // Estatus Buffet según posición
+    let estatusBuffet = '';
+    let estatusColor = '';
+    if (pos <= 16) {
+      estatusBuffet = '🎯 Elige Rival (Top 16)';
+      estatusColor = 'text-amber-400 font-black';
+    } else if (pos <= 32) {
+      estatusBuffet = '✅ Clasificado Final';
+      estatusColor = 'text-emerald-400 font-bold';
+    } else {
+      estatusBuffet = 'Sin clasificar';
+      estatusColor = 'text-gray-500 font-normal';
+    }
 
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <td class="py-2.5 px-2 text-center font-black font-mono text-lg text-amber-400">${j.posicion || (idx + 1)}</td>
+      <td class="py-2.5 px-2 text-center font-black font-mono text-lg text-amber-400">${pos}</td>
       <td class="py-2.5 px-2 font-extrabold text-base text-white whitespace-nowrap max-w-[210px] truncate" title="${j.nombreJugador}">
         ${j.nombreJugador || '-'}
       </td>
@@ -173,12 +176,15 @@ function renderTableCat1() {
       <td class="py-2.5 px-3 text-right font-mono font-black text-amber-400 text-xl bg-amber-500/10 whitespace-nowrap">
         ${Number(j.totHdcp || 0).toLocaleString()}
       </td>
+      <td class="py-2.5 px-3 text-center text-xs whitespace-nowrap ${estatusColor}">
+        ${estatusBuffet}
+      </td>
     `;
     tbody.appendChild(row);
   });
 }
 
-/* RENDER TV INDIVIDUAL CAT 2 */
+/* RENDER INDIVIDUAL CAT 2 CON ESTATUS BUFFET */
 function renderTableCat2() {
   const tbody = document.getElementById('tbodyCat2');
   if (!tbody) return;
@@ -187,12 +193,27 @@ function renderTableCat2() {
   (tournamentData.cat2 || []).forEach((j, idx) => {
     const l = j.lineas || {};
     const promTruncado = Math.floor(Number(j.promedioTorneo || 0));
+    const pos = j.posicion || (idx + 1);
+
+    // Estatus Buffet según posición
+    let estatusBuffet = '';
+    let estatusColor = '';
+    if (pos <= 16) {
+      estatusBuffet = '🎯 Elige Rival (Top 16)';
+      estatusColor = 'text-amber-400 font-black';
+    } else if (pos <= 32) {
+      estatusBuffet = '✅ Clasificado Final';
+      estatusColor = 'text-emerald-400 font-bold';
+    } else {
+      estatusBuffet = 'Sin clasificar';
+      estatusColor = 'text-gray-500 font-normal';
+    }
 
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <td class="py-2.5 px-2 text-center font-black font-mono text-lg text-amber-400">${j.posicion || (idx + 1)}</td>
+      <td class="py-2.5 px-2 text-center font-black font-mono text-lg text-amber-400">${pos}</td>
       <td class="py-2.5 px-2 font-extrabold text-base text-white whitespace-nowrap max-w-[210px] truncate" title="${j.nombreJugador}">
         ${j.nombreJugador || '-'}
       </td>
@@ -209,6 +230,9 @@ function renderTableCat2() {
       <td class="py-2.5 px-2.5 text-right font-mono font-extrabold text-gray-100 text-base whitespace-nowrap">${Number(j.totScratch || 0).toLocaleString()}</td>
       <td class="py-2.5 px-3 text-right font-mono font-black text-amber-400 text-xl bg-amber-500/10 whitespace-nowrap">
         ${Number(j.totHdcp || 0).toLocaleString()}
+      </td>
+      <td class="py-2.5 px-3 text-center text-xs whitespace-nowrap ${estatusColor}">
+        ${estatusBuffet}
       </td>
     `;
     tbody.appendChild(row);
@@ -248,7 +272,6 @@ function populateDetailSelect() {
   });
 }
 
-/* RENDER FICHA X EQUIPO (SIN CAT NI HDCP, MÁXIMA COMPACTACIÓN) */
 function renderEquipoDetailContent() {
   const container = document.getElementById('containerEquipoDetailContent');
   const select = document.getElementById('selectDetailEquipo');
@@ -309,22 +332,6 @@ function renderEquipoDetailContent() {
   `;
 }
 
-function initCarousel() {
-  setInterval(() => {
-    if (isPaused) return;
-    carouselTimer--;
-    if (progressBar) progressBar.style.width = `${(carouselTimer / CAROUSEL_INTERVAL_SEC) * 100}%`;
-    if (timerElem) timerElem.innerText = `00:${carouselTimer.toString().padStart(2, '0')}`;
-    if (carouselTimer <= 0) {
-      currentViewIndex = (currentViewIndex + 1) % views.length;
-      switchView(views[currentViewIndex]);
-      carouselTimer = CAROUSEL_INTERVAL_SEC;
-      if (progressBar) progressBar.style.width = '100%';
-      if (currentViewIndex === 0) fetchTournamentData();
-    }
-  }, 1000);
-}
-
 function switchView(viewName) {
   const allViews = ['equipos', 'cat1', 'cat2', 'premios', 'equipoDetail'];
   allViews.forEach(v => {
@@ -343,10 +350,6 @@ function switchView(viewName) {
 
   const titles = { equipos: 'CUARTETAS (EQUIPOS)', cat1: 'INDIVIDUAL CATEGORÍA 1', cat2: 'INDIVIDUAL CATEGORÍA 2', premios: 'PREMIOS ESPECIALES', equipoDetail: 'FICHA X EQUIPO' };
   if (currentViewBadge) currentViewBadge.innerText = titles[viewName] || viewName.toUpperCase();
-}
-
-function togglePauseCarousel() {
-  isPaused = !isPaused;
 }
 
 function capitalize(s) {

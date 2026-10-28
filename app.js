@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Sin Rotación & Estatus Buffet)
+ * TV Display & Data Engine (Regla Clasificados Cuartetas hasta Top 28)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -97,7 +97,7 @@ function renderPerfectGameAlert() {
   }
 }
 
-/* RENDER CUARTETAS */
+/* RENDER CUARTETAS CON REGLA TOP 28 CLASIFICADOS */
 function renderTableEquipos() {
   const tbody = document.getElementById('tbodyEquipos');
   if (!tbody) return;
@@ -105,12 +105,30 @@ function renderTableEquipos() {
   const equipos = tournamentData.equipos || [];
 
   equipos.forEach((eq, idx) => {
-    let estado = idx === 0 ? '🏆 Sembrado #1' : idx === 1 ? '⭐ Sembrado #2' : '⚡ Clasificado';
+    const pos = eq.posicion || (idx + 1);
+
+    let estado = '';
+    let estadoColor = '';
+
+    if (pos === 1) {
+      estado = '🏆 Sembrado #1';
+      estadoColor = 'text-amber-400 font-black';
+    } else if (pos === 2) {
+      estado = '⭐ Sembrado #2';
+      estadoColor = 'text-amber-300 font-black';
+    } else if (pos <= 28) {
+      estado = '⚡ Clasificado';
+      estadoColor = 'text-emerald-400 font-bold';
+    } else {
+      estado = 'Sin clasificar';
+      estadoColor = 'text-gray-500 font-normal';
+    }
+
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white text-lg font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <td class="py-3 px-2 text-center font-black font-mono text-xl text-amber-400">${eq.posicion || (idx + 1)}</td>
+      <td class="py-3 px-2 text-center font-black font-mono text-xl text-amber-400">${pos}</td>
       <td class="py-3 px-3 font-extrabold text-xl text-white whitespace-nowrap">${eq.nombreEquipo || '-'}</td>
       <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchVie || 0).toLocaleString()}</td>
       <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerVie || '-'}</td>
@@ -121,7 +139,7 @@ function renderTableEquipos() {
       <td class="py-3 px-4 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
         ${Number(eq.granTotHdcp || 0).toLocaleString()}
       </td>
-      <td class="py-3 px-3 text-center text-xs font-black ${idx < 2 ? 'text-amber-400' : 'text-emerald-400'}">
+      <td class="py-3 px-3 text-center text-xs whitespace-nowrap ${estadoColor}">
         ${estado}
       </td>
     `;
@@ -140,7 +158,6 @@ function renderTableCat1() {
     const promTruncado = Math.floor(Number(j.promedioTorneo || 0));
     const pos = j.posicion || (idx + 1);
 
-    // Estatus Buffet según posición
     let estatusBuffet = '';
     let estatusColor = '';
     if (pos <= 16) {
@@ -195,7 +212,6 @@ function renderTableCat2() {
     const promTruncado = Math.floor(Number(j.promedioTorneo || 0));
     const pos = j.posicion || (idx + 1);
 
-    // Estatus Buffet según posición
     let estatusBuffet = '';
     let estatusColor = '';
     if (pos <= 16) {
@@ -272,6 +288,7 @@ function populateDetailSelect() {
   });
 }
 
+/* RENDER FICHA X EQUIPO */
 function renderEquipoDetailContent() {
   const container = document.getElementById('containerEquipoDetailContent');
   const select = document.getElementById('selectDetailEquipo');

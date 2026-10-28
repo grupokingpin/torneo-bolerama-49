@@ -1,11 +1,11 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Premios Oficiales Completos)
+ * TV Display & Data Engine (Premios 100% Dinámicos de Google Sheets)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
 
-let tournamentData = { equipos: [], cat1: [], cat2: [], stats: {}, premios: {}, perfectGames: [] };
+let tournamentData = { equipos: [], cat1: [], cat2: [], stats: {}, premios: {}, tableroPremios: null, perfectGames: [] };
 
 const currentViewBadge = document.getElementById('currentViewBadge');
 
@@ -41,6 +41,7 @@ function renderAll() {
   try { renderTableEquipos(); } catch(e) { console.error('Error Equipos:', e); }
   try { renderTableCat1(); } catch(e) { console.error('Error Cat1:', e); }
   try { renderTableCat2(); } catch(e) { console.error('Error Cat2:', e); }
+  try { renderTableroPremiosDinamico(); } catch(e) { console.error('Error Premios:', e); }
   try { renderEquipoDetailContent(); } catch(e) { console.error('Error Detail:', e); }
 }
 
@@ -82,6 +83,20 @@ function renderKPIs() {
 function renderPerfectGameAlert() {
   const alertBox = document.getElementById('perfectGameAlert');
   if (!alertBox) return;
+
+  // Si en la hoja de Premios cambiaron el nombre del jugador del 300, lo mostramos
+  const p300 = tournamentData.tableroPremios?.juegoPerfecto;
+  if (p300 && p300.jugador && p300.jugador.trim() !== '') {
+    const elemP = document.getElementById('perfectGamePlayer');
+    if (elemP) elemP.innerText = p300.jugador;
+    const elemT = document.getElementById('perfectGameTeam');
+    if (elemT) elemT.innerText = p300.equipo || 'Bolerama Coyoacan';
+    const elemL = document.getElementById('perfectGameLine');
+    if (elemL) elemL.innerText = `Línea 1 (${p300.dia || 'Viernes'})`;
+    alertBox.classList.remove('hidden');
+    return;
+  }
+
   if (tournamentData.perfectGames && tournamentData.perfectGames.length > 0) {
     const pg = tournamentData.perfectGames[0];
     const elemP = document.getElementById('perfectGamePlayer');
@@ -105,7 +120,6 @@ function renderTableEquipos() {
 
   equipos.forEach((eq, idx) => {
     const pos = eq.posicion || (idx + 1);
-
     let estado = '';
     let estadoColor = '';
 
@@ -254,6 +268,240 @@ function renderTableCat2() {
   });
 }
 
+/* RENDER TABLERO OFICIAL DE PREMIOS 100% DINÁMICO DESDE GOOGLE SHEETS */
+function renderTableroPremiosDinamico() {
+  const container = document.getElementById('containerTableroPremiosDinamico');
+  if (!container) return;
+
+  const tp = tournamentData.tableroPremios;
+  if (!tp) {
+    container.innerHTML = '<p class="text-gray-400 p-6 text-center">Cargando premios oficiales desde Google Sheets...</p>';
+    return;
+  }
+
+  const eq = tp.equipos || {};
+  const c1 = tp.cat1 || {};
+  const c2 = tp.cat2 || {};
+  const jp = tp.juegoPerfecto || {};
+  const pases = tp.pases || {};
+
+  container.innerHTML = `
+    <!-- ENCABEZADO OFICIAL DE BOLSA -->
+    <div class="bg-[#131B2E] border border-brand-border rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="text-xs uppercase tracking-widest font-black text-amber-400">CONVOCATORIA OFICIAL</span>
+          <span class="text-xs text-gray-400">• Control de Premiación en Efectivo</span>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-display font-black uppercase text-white tracking-wide mt-1">
+          Tablero Oficial de Premiación
+        </h2>
+      </div>
+      <div class="flex items-center gap-3 bg-[#0A0E17] border border-amber-500/40 px-5 py-3 rounded-2xl">
+        <span class="text-xs font-bold text-gray-300 uppercase">Bolsa Oficial Convocatoria:</span>
+        <span class="text-2xl md:text-3xl font-mono font-black text-amber-400">${tp.bolsaConvocatoria || '$680,000 MXN'}</span>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 1: LAS 3 TABLAS PRINCIPALES (CUARTETAS, CAT 1, CAT 2) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+      
+      <!-- CUARTETAS -->
+      <div class="bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="border-b border-brand-border pb-2.5 mb-3">
+            <h3 class="text-base font-display font-black uppercase text-amber-400 flex items-center space-x-2">
+              <span>🏆</span>
+              <span>Premiación Equipos (Cuartetas)</span>
+            </h3>
+          </div>
+          
+          <table class="w-full text-left text-xs mb-4">
+            <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
+              <tr>
+                <th class="py-2 px-2">Posición / Concepto</th>
+                <th class="py-2 px-2 text-right">Premio (MXN)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-brand-border/40 font-bold">
+              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar1 || '$165,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar2 || '$120,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar3 || '$85,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar4 || '$40,000'}</td></tr>
+            </tbody>
+          </table>
+
+          <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
+            <p class="text-[11px] font-black uppercase tracking-wider text-red-400 mb-2">Premios Especiales c/HDCP</p>
+            <div class="space-y-1.5 text-xs">
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${eq.tiroVie?.equipo} (${eq.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${eq.tiroVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${eq.tiroSab?.equipo} (${eq.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${eq.tiroSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${eq.serieVie?.equipo} (${eq.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${eq.serieVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${eq.serieSab?.equipo} (${eq.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${eq.serieSab?.premio}</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-brand-border pt-2 flex justify-between items-center text-xs font-black">
+          <span class="text-gray-400 uppercase">Subtotal Equipos:</span>
+          <span class="text-amber-400 font-mono text-base">${eq.subtotal || '$426,000 MXN'}</span>
+        </div>
+      </div>
+
+      <!-- CAT 1 -->
+      <div class="bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="border-b border-brand-border pb-2.5 mb-3">
+            <h3 class="text-base font-display font-black uppercase text-amber-400 flex items-center space-x-2">
+              <span>🥇</span>
+              <span>Individual Cat 1 (191 a 220)</span>
+            </h3>
+          </div>
+          
+          <table class="w-full text-left text-xs mb-4">
+            <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
+              <tr>
+                <th class="py-2 px-2">Posición / Concepto</th>
+                <th class="py-2 px-2 text-right">Premio (MXN)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-brand-border/40 font-bold">
+              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar1 || '$38,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar2 || '$30,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar3 || '$20,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar4 || '$10,000'}</td></tr>
+            </tbody>
+          </table>
+
+          <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
+            <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
+            <div class="space-y-1.5 text-xs">
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c1.tiroVie?.jugador} (${c1.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${c1.tiroVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c1.tiroSab?.jugador} (${c1.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${c1.tiroSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c1.serieVie?.jugador} (${c1.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${c1.serieVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c1.serieSab?.jugador} (${c1.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${c1.serieSab?.premio}</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-brand-border pt-2 flex justify-between items-center text-xs font-black">
+          <span class="text-gray-400 uppercase">Subtotal Cat 1:</span>
+          <span class="text-amber-400 font-mono text-base">${c1.subtotal || '$102,000 MXN'}</span>
+        </div>
+      </div>
+
+      <!-- CAT 2 -->
+      <div class="bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="border-b border-brand-border pb-2.5 mb-3">
+            <h3 class="text-base font-display font-black uppercase text-amber-400 flex items-center space-x-2">
+              <span>🥇</span>
+              <span>Individual Cat 2 (160 a 190)</span>
+            </h3>
+          </div>
+          
+          <table class="w-full text-left text-xs mb-4">
+            <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
+              <tr>
+                <th class="py-2 px-2">Posición / Concepto</th>
+                <th class="py-2 px-2 text-right">Premio (MXN)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-brand-border/40 font-bold">
+              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar1 || '$38,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar2 || '$30,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar3 || '$20,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar4 || '$10,000'}</td></tr>
+            </tbody>
+          </table>
+
+          <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
+            <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
+            <div class="space-y-1.5 text-xs">
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c2.tiroVie?.jugador} (${c2.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${c2.tiroVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c2.tiroSab?.jugador} (${c2.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${c2.tiroSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c2.serieVie?.jugador} (${c2.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${c2.serieVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c2.serieSab?.jugador} (${c2.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${c2.serieSab?.premio}</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-brand-border pt-2 flex justify-between items-center text-xs font-black">
+          <span class="text-gray-400 uppercase">Subtotal Cat 2:</span>
+          <span class="text-amber-400 font-mono text-base">${c2.subtotal || '$102,000 MXN'}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) DINÁMICO (MONTO Y GANADOR) -->
+    <div class="bg-gradient-to-r from-amber-950/40 via-[#131B2E] to-amber-950/40 border-2 border-amber-500/50 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+      <div class="flex items-center space-x-4">
+        <div class="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center font-display text-3xl font-black text-black shadow-lg">
+          300
+        </div>
+        <div>
+          <span class="text-xs font-black uppercase text-amber-400 tracking-wider">PREMIO AL PRIMER JUEGO PERFECTO (LÍNEA 300 SCRATCH)</span>
+          <h3 class="text-xl md:text-2xl font-black text-white mt-0.5">
+            Ganador: <span class="text-emerald-400 underline">${jp.jugador || 'Eugenio San ciprián'}</span> • <span class="text-gray-300">${jp.equipo || 'Bolerama Coyoacan'}</span>
+          </h3>
+          <p class="text-xs text-gray-400 mt-1">Registrado en Línea 1 • ${jp.dia || 'Viernes 30 Oct'} • Avalado Oficial</p>
+        </div>
+      </div>
+      <div class="text-center md:text-right bg-[#0A0E17] border border-amber-500/40 px-6 py-3 rounded-2xl">
+        <span class="text-[11px] font-bold text-gray-400 uppercase">Bolsa Entregada</span>
+        <p class="text-3xl font-mono font-black text-amber-400">${jp.premio || '$60,000'}</p>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: CLASIFICADOS AL TORNEO DEL 300 / 800 (DICIEMBRE 2026) -->
+    <div class="bg-[#131B2E] border border-brand-border rounded-2xl p-5 shadow-2xl">
+      <div class="border-b border-brand-border pb-3 mb-4">
+        <h3 class="text-lg font-display font-black uppercase text-cyan-400 flex items-center space-x-2">
+          <span>🎟️</span>
+          <span>Clasificados al Torneo del 300 / 800 (Diciembre 2026 — Bolerama Coyoacán)</span>
+        </h3>
+        <p class="text-xs text-gray-400 mt-0.5">
+          * Convocatoria Oficial: Los 4 integrantes del equipo campeón y los 2 campeones individuales obtienen su pase directo.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
+          <span class="text-[11px] font-black uppercase text-amber-400 mb-2">Cuarteta Campeona (4 Pases)</span>
+          <div class="space-y-1 text-gray-300 font-semibold">
+            <p>• Titular 1: <span class="text-gray-400">${pases.cuarteta?.[0] || '(Pendiente de Gran Final)'}</span></p>
+            <p>• Titular 2: <span class="text-gray-400">${pases.cuarteta?.[1] || '(Pendiente de Gran Final)'}</span></p>
+            <p>• Titular 3: <span class="text-gray-400">${pases.cuarteta?.[2] || '(Pendiente de Gran Final)'}</span></p>
+            <p>• Titular 4: <span class="text-gray-400">${pases.cuarteta?.[3] || '(Pendiente de Gran Final)'}</span></p>
+          </div>
+          <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
+        </div>
+
+        <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
+          <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 1 (1 Pase)</span>
+          <div class="space-y-1 text-gray-300 font-semibold">
+            <p class="text-sm font-black text-white">Jugador Ganador:</p>
+            <p class="text-gray-400">${pases.cat1?.jugador || '(Pendiente de Final Cat 1)'}</p>
+            <p class="text-emerald-400 font-bold mt-2">Pase Oficial: ${pases.cat1?.pase || 'En espera de definición'}</p>
+          </div>
+          <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
+        </div>
+
+        <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
+          <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 2 (1 Pase)</span>
+          <div class="space-y-1 text-gray-300 font-semibold">
+            <p class="text-sm font-black text-white">Jugador Ganador:</p>
+            <p class="text-gray-400">${pases.cat2?.jugador || '(Pendiente de Final Cat 2)'}</p>
+            <p class="text-emerald-400 font-bold mt-2">Pase Oficial: ${pases.cat2?.pase || 'En espera de definición'}</p>
+          </div>
+          <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function populateDetailSelect() {
   const select = document.getElementById('selectDetailEquipo');
   if (!select) return;
@@ -266,7 +514,6 @@ function populateDetailSelect() {
   });
 }
 
-/* RENDER FICHA X EQUIPO */
 function renderEquipoDetailContent() {
   const container = document.getElementById('containerEquipoDetailContent');
   const select = document.getElementById('selectDetailEquipo');

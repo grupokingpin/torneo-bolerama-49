@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Regla Clasificados Cuartetas hasta Top 28)
+ * TV Display & Data Engine (Premios Oficiales Completos)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -41,7 +41,6 @@ function renderAll() {
   try { renderTableEquipos(); } catch(e) { console.error('Error Equipos:', e); }
   try { renderTableCat1(); } catch(e) { console.error('Error Cat1:', e); }
   try { renderTableCat2(); } catch(e) { console.error('Error Cat2:', e); }
-  try { renderPremiosGrid(); } catch(e) { console.error('Error Premios:', e); }
   try { renderEquipoDetailContent(); } catch(e) { console.error('Error Detail:', e); }
 }
 
@@ -147,7 +146,7 @@ function renderTableEquipos() {
   });
 }
 
-/* RENDER INDIVIDUAL CAT 1 CON ESTATUS BUFFET */
+/* RENDER INDIVIDUAL CAT 1 */
 function renderTableCat1() {
   const tbody = document.getElementById('tbodyCat1');
   if (!tbody) return;
@@ -201,7 +200,7 @@ function renderTableCat1() {
   });
 }
 
-/* RENDER INDIVIDUAL CAT 2 CON ESTATUS BUFFET */
+/* RENDER INDIVIDUAL CAT 2 */
 function renderTableCat2() {
   const tbody = document.getElementById('tbodyCat2');
   if (!tbody) return;
@@ -253,27 +252,6 @@ function renderTableCat2() {
     `;
     tbody.appendChild(row);
   });
-}
-
-function renderPremiosGrid() {
-  const container = document.getElementById('containerPremiosGrid');
-  if (!container) return;
-  const p = tournamentData.premios || {};
-  const cards = [
-    { title: '🥇 Tiro Mayor Equipo', score: p.tiroMayorEquipoVie?.maxTiroVieHdcp, name: p.tiroMayorEquipoVie?.nombreEquipo },
-    { title: '🏆 Serie Mayor Equipo', score: p.serieMayorEquipoVie?.serieVieHdcp, name: p.serieMayorEquipoVie?.nombreEquipo },
-    { title: '⭐ Tiro Mayor Ind', score: p.tiroMayorIndVie?.maxTiroVieHdcp, name: p.tiroMayorIndVie?.nombreJugador },
-    { title: '👑 Serie Mayor Ind', score: p.serieMayorIndVie?.serieVieHdcp, name: p.serieMayorIndVie?.nombreJugador }
-  ];
-  container.innerHTML = cards.map(c => `
-    <div class="bg-[#0A0E17] border border-amber-500/40 p-5 rounded-2xl flex flex-col justify-between">
-      <span class="text-xs uppercase font-black text-amber-400">${c.title}</span>
-      <div class="my-3">
-        <span class="text-4xl font-display font-black text-white">${c.score || 0}</span>
-        <p class="text-lg font-black text-amber-300 mt-1 truncate">${c.name || '-'}</p>
-      </div>
-    </div>
-  `).join('');
 }
 
 function populateDetailSelect() {
@@ -365,7 +343,13 @@ function switchView(viewName) {
     }
   });
 
-  const titles = { equipos: 'CUARTETAS (EQUIPOS)', cat1: 'INDIVIDUAL CATEGORÍA 1', cat2: 'INDIVIDUAL CATEGORÍA 2', premios: 'PREMIOS ESPECIALES', equipoDetail: 'FICHA X EQUIPO' };
+  const titles = {
+    equipos: 'CUARTETAS (EQUIPOS)',
+    cat1: 'INDIVIDUAL CATEGORÍA 1',
+    cat2: 'INDIVIDUAL CATEGORÍA 2',
+    premios: 'TABLERO DE PREMIACIÓN',
+    equipoDetail: 'FICHA X EQUIPO'
+  };
   if (currentViewBadge) currentViewBadge.innerText = titles[viewName] || viewName.toUpperCase();
 }
 

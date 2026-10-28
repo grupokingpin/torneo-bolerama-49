@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Corrección Cintillo 300 y Premios Dinámicos)
+ * TV Display & Data Engine (Cintillo 300 Estricto y Premios Dinámicos)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -81,8 +81,8 @@ function renderKPIs() {
 }
 
 /**
- * CINTILLO AMARILLO SUPERIOR:
- * Solo se muestra si alguien realmente tiró 300 en la hoja de Captura (perfectGames.length > 0)
+ * CINTILLO AMARILLO SUPERIOR (REGLA ESTRICTA):
+ * SOLO se muestra si en la hoja de Captura se registró un tiro de 300 real (perfectGames.length > 0).
  * Si nadie ha tirado 300, se oculta inmediatamente.
  */
 function renderPerfectGameAlert() {
@@ -99,7 +99,6 @@ function renderPerfectGameAlert() {
     if (elemL) elemL.innerText = `${pg.linea} (${pg.dia})`;
     alertBox.classList.remove('hidden');
   } else {
-    // Nadie ha tirado 300: se oculta el cintillo
     alertBox.classList.add('hidden');
   }
 }
@@ -261,7 +260,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS 100% DINÁMICO */
+/* RENDER TABLERO OFICIAL DE PREMIOS DINÁMICO */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -278,10 +277,14 @@ function renderTableroPremiosDinamico() {
   const jp = tp.juegoPerfecto || {};
   const pases = tp.pases || {};
 
-  // Formato para Ganador del 300: Si dice Pendiente, no inventar nombre ni equipo
-  const ganador300Texto = (jp.jugador && !jp.jugador.includes('Pendiente')) 
+  // Validar si hay ganador de 300
+  const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente');
+  const ganador300Texto = tieneGanador
     ? `<span class="text-emerald-400 underline">${jp.jugador}</span> • <span class="text-gray-300">${jp.equipo || 'Bolerama Coyoacan'}</span>`
     : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;
+
+  // Monto del premio desde Sheets
+  const monto300 = (jp.premio && jp.premio.trim() !== '') ? jp.premio : '$80,000';
 
   container.innerHTML = `
     <!-- ENCABEZADO OFICIAL DE BOLSA -->
@@ -301,7 +304,7 @@ function renderTableroPremiosDinamico() {
       </div>
     </div>
 
-    <!-- SECCIÓN 1: LAS 3 TABLAS PRINCIPALES (CUARTETAS, CAT 1, CAT 2) -->
+    <!-- SECCIÓN 1: CUARTETAS, CAT 1, CAT 2 -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
       
       <!-- CUARTETAS -->
@@ -322,10 +325,10 @@ function renderTableroPremiosDinamico() {
               </tr>
             </thead>
             <tbody class="divide-y divide-brand-border/40 font-bold">
-              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar1 || '$165,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar2 || '$120,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar3 || '$85,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar4 || '$40,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar1}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar2}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar3}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar4}</td></tr>
             </tbody>
           </table>
 
@@ -342,7 +345,7 @@ function renderTableroPremiosDinamico() {
 
         <div class="border-t border-brand-border pt-2 flex justify-between items-center text-xs font-black">
           <span class="text-gray-400 uppercase">Subtotal Equipos:</span>
-          <span class="text-amber-400 font-mono text-base">${eq.subtotal || '$426,000 MXN'}</span>
+          <span class="text-amber-400 font-mono text-base">${eq.subtotal}</span>
         </div>
       </div>
 
@@ -364,10 +367,10 @@ function renderTableroPremiosDinamico() {
               </tr>
             </thead>
             <tbody class="divide-y divide-brand-border/40 font-bold">
-              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar1 || '$38,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar2 || '$30,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar3 || '$20,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar4 || '$10,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar1}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar2}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar3}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar4}</td></tr>
             </tbody>
           </table>
 
@@ -384,7 +387,7 @@ function renderTableroPremiosDinamico() {
 
         <div class="border-t border-brand-border pt-2 flex justify-between items-center text-xs font-black">
           <span class="text-gray-400 uppercase">Subtotal Cat 1:</span>
-          <span class="text-amber-400 font-mono text-base">${c1.subtotal || '$102,000 MXN'}</span>
+          <span class="text-amber-400 font-mono text-base">${c1.subtotal}</span>
         </div>
       </div>
 
@@ -406,10 +409,10 @@ function renderTableroPremiosDinamico() {
               </tr>
             </thead>
             <tbody class="divide-y divide-brand-border/40 font-bold">
-              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar1 || '$38,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar2 || '$30,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar3 || '$20,000'}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar4 || '$10,000'}</td></tr>
+              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar1}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar2}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar3}</td></tr>
+              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar4}</td></tr>
             </tbody>
           </table>
 
@@ -426,7 +429,7 @@ function renderTableroPremiosDinamico() {
 
         <div class="border-t border-brand-border pt-2 flex justify-between items-center text-xs font-black">
           <span class="text-gray-400 uppercase">Subtotal Cat 2:</span>
-          <span class="text-amber-400 font-mono text-base">${c2.subtotal || '$102,000 MXN'}</span>
+          <span class="text-amber-400 font-mono text-base">${c2.subtotal}</span>
         </div>
       </div>
 
@@ -443,12 +446,12 @@ function renderTableroPremiosDinamico() {
           <h3 class="text-xl md:text-2xl font-black text-white mt-0.5">
             Ganador: ${ganador300Texto}
           </h3>
-          <p class="text-xs text-gray-400 mt-1">${jp.dia && jp.dia !== '-' ? `Registrado • ${jp.dia}` : 'Pendiente de Registro en Ronda Oficial'}</p>
+          <p class="text-xs text-gray-400 mt-1">${jp.dia ? `Registrado • ${jp.dia}` : 'Pendiente de Registro en Ronda Oficial'}</p>
         </div>
       </div>
       <div class="text-center md:text-right bg-[#0A0E17] border border-amber-500/40 px-6 py-3 rounded-2xl">
         <span class="text-[11px] font-bold text-gray-400 uppercase">Bolsa Entregada</span>
-        <p class="text-3xl font-mono font-black text-amber-400">${jp.premio || '$60,000'}</p>
+        <p class="text-3xl font-mono font-black text-amber-400">${monto300}</p>
       </div>
     </div>
 

@@ -278,7 +278,7 @@ function renderTableroPremiosDinamico() {
   const pases = tp.pases || {};
 
   // Formato para Ganador del 300
-  const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente');
+  const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente') && !jp.jugador.toLowerCase().includes('concepto');
   const ganador300Texto = tieneGanador
     ? `<span class="text-emerald-400 underline font-extrabold">${jp.jugador}</span> • <span class="text-gray-200 font-bold">${jp.equipo || 'Bolerama Coyoacan'}</span>`
     : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;

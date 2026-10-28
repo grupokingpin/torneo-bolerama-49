@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Sincronización Total con Hoja Premios)
+ * TV Display & Data Engine (Premios 100% Alineados con Sheets)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -260,7 +260,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS (100% FIEL A HOJA PREMIOS) */
+/* RENDER TABLERO OFICIAL DE PREMIOS (ALINEACIÓN EXACTA CON HOJA PREMIOS) */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -280,7 +280,7 @@ function renderTableroPremiosDinamico() {
   // Formato para Ganador del 300
   const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente') && !jp.jugador.toLowerCase().includes('concepto');
   const ganador300Texto = tieneGanador
-    ? `<span class="text-emerald-400 underline font-extrabold">${jp.jugador}</span> • <span class="text-gray-200 font-bold">${jp.equipo || 'Bolerama Coyoacan'}</span>`
+    ? `<span class="text-emerald-400 underline font-extrabold text-2xl">${jp.jugador}</span> • <span class="text-gray-200 font-bold text-xl">${jp.equipo || 'Bolerama Coyoacan'}</span>`
     : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;
 
   container.innerHTML = `
@@ -332,10 +332,10 @@ function renderTableroPremiosDinamico() {
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-red-400 mb-2">Premios Especiales c/HDCP</p>
             <div class="space-y-1.5 text-xs">
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${eq.tiroVie?.equipo} (${eq.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${eq.tiroVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${eq.tiroSab?.equipo} (${eq.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${eq.tiroSab?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${eq.serieVie?.equipo} (${eq.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${eq.serieVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${eq.serieSab?.equipo} (${eq.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${eq.serieSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${eq.tiroVie?.equipo} (${eq.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${eq.tiroVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${eq.tiroSab?.equipo} (${eq.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${eq.tiroSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${eq.serieVie?.equipo} (${eq.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${eq.serieVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${eq.serieSab?.equipo} (${eq.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${eq.serieSab?.premio}</span></div></div>
             </div>
           </div>
         </div>
@@ -374,10 +374,10 @@ function renderTableroPremiosDinamico() {
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
             <div class="space-y-1.5 text-xs">
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c1.tiroVie?.jugador} (${c1.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${c1.tiroVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c1.tiroSab?.jugador} (${c1.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${c1.tiroSab?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c1.serieVie?.jugador} (${c1.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${c1.serieVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c1.serieSab?.jugador} (${c1.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${c1.serieSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c1.tiroVie?.jugador} (${c1.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c1.tiroVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c1.tiroSab?.jugador} (${c1.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c1.tiroSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c1.serieVie?.jugador} (${c1.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c1.serieVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c1.serieSab?.jugador} (${c1.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c1.serieSab?.premio}</span></div></div>
             </div>
           </div>
         </div>
@@ -416,10 +416,10 @@ function renderTableroPremiosDinamico() {
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
             <div class="space-y-1.5 text-xs">
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c2.tiroVie?.jugador} (${c2.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${c2.tiroVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c2.tiroSab?.jugador} (${c2.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${c2.tiroSab?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c2.serieVie?.jugador} (${c2.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2">${c2.serieVie?.premio}</span></div></div>
-              <div class="flex justify-between items-center"><span class="text-gray-400 truncate max-w-[140px]">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c2.serieSab?.jugador} (${c2.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2">${c2.serieSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c2.tiroVie?.jugador} (${c2.tiroVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c2.tiroVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Tiro Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c2.tiroSab?.jugador} (${c2.tiroSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c2.tiroSab?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Vie:</span><div class="text-right"><strong class="text-emerald-400">${c2.serieVie?.jugador} (${c2.serieVie?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c2.serieVie?.premio}</span></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-400">Serie Mayor Sáb:</span><div class="text-right"><strong class="text-emerald-400">${c2.serieSab?.jugador} (${c2.serieSab?.score})</strong><span class="text-amber-400 font-mono ml-2 font-bold">${c2.serieSab?.premio}</span></div></div>
             </div>
           </div>
         </div>

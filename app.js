@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Alineación Pases 300/800 Corregida)
+ * TV Display & Data Engine (Premios Especiales Corregidos)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -80,6 +80,10 @@ function renderKPIs() {
   if (elemSerieIndName) elemSerieIndName.innerText = serieInd.nombreJugador || '-';
 }
 
+/**
+ * CINTILLO AMARILLO SUPERIOR (REGLA ESTRICTA):
+ * SOLO se muestra si en la hoja de Captura se registró un tiro de 300 real (perfectGames.length > 0).
+ */
 function renderPerfectGameAlert() {
   const alertBox = document.getElementById('perfectGameAlert');
   if (!alertBox) return;

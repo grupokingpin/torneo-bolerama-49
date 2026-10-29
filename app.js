@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Alineación Pases 300/800 Corregida)
+ * TV Display & Data Engine (Cuartetas con 6 Columnas Optimizadas)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -102,7 +102,7 @@ function renderPerfectGameAlert() {
   }
 }
 
-/* RENDER CUARTETAS CON REGLA TOP 28 CLASIFICADOS */
+/* RENDER CUARTETAS CON EXACTAMENTE 6 COLUMNAS */
 function renderTableEquipos() {
   const tbody = document.getElementById('tbodyEquipos');
   if (!tbody) return;
@@ -132,18 +132,25 @@ function renderTableEquipos() {
     row.className = 'bg-[#18233A] text-white text-lg font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <td class="py-3 px-2 text-center font-black font-mono text-xl text-amber-400">${pos}</td>
-      <td class="py-3 px-3 font-extrabold text-xl text-white whitespace-nowrap">${eq.nombreEquipo || '-'}</td>
-      <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchVie || 0).toLocaleString()}</td>
-      <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerVie || '-'}</td>
-      <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(eq.totVieHdcp || 0).toLocaleString()}</td>
-      <td class="py-3 px-2 text-right font-mono text-gray-300">${Number(eq.scratchSab || 0).toLocaleString()}</td>
-      <td class="py-3 px-2 text-center font-mono text-amber-300 font-black">${eq.bakerSab || '-'}</td>
-      <td class="py-3 px-3 text-right font-mono font-extrabold text-gray-100">${Number(eq.totSabHdcp || 0).toLocaleString()}</td>
-      <td class="py-3 px-4 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
+      <!-- 1. POS -->
+      <td class="py-3 px-3 text-center font-black font-mono text-xl text-amber-400">${pos}</td>
+      
+      <!-- 2. EQUIPO -->
+      <td class="py-3 px-4 font-extrabold text-xl text-white whitespace-nowrap">${eq.nombreEquipo || '-'}</td>
+      
+      <!-- 3. TOT VIE C/HDCP -->
+      <td class="py-3 px-4 text-right font-mono font-extrabold text-gray-100 text-xl">${Number(eq.totVieHdcp || 0).toLocaleString()}</td>
+      
+      <!-- 4. TOT SÁB C/HDCP -->
+      <td class="py-3 px-4 text-right font-mono font-extrabold text-gray-100 text-xl">${Number(eq.totSabHdcp || 0).toLocaleString()}</td>
+      
+      <!-- 5. TOTAL GENERAL C/HDCP -->
+      <td class="py-3 px-6 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
         ${Number(eq.granTotHdcp || 0).toLocaleString()}
       </td>
-      <td class="py-3 px-3 text-center text-xs whitespace-nowrap ${estadoColor}">
+      
+      <!-- 6. ESTADO -->
+      <td class="py-3 px-4 text-center text-xs whitespace-nowrap ${estadoColor}">
         ${estado}
       </td>
     `;
@@ -259,7 +266,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS (100% DINÁMICO DE GOOGLE SHEETS) */
+/* RENDER TABLERO OFICIAL DE PREMIOS */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -525,7 +532,7 @@ function renderTableroPremiosDinamico() {
 
     </div>
 
-    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) - LECTURA DIRECTA DE LA CELDA AMARILLA -->
+    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) -->
     <div class="bg-gradient-to-r from-amber-950/40 via-[#131B2E] to-amber-950/40 border-2 border-amber-500/50 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
       <div class="flex items-center space-x-4">
         <div class="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center font-display text-3xl font-black text-black shadow-lg">

@@ -122,23 +122,19 @@
       </button>
     </div>
 
-    <!-- PANTALLA 1: CUARTETAS TV -->
+    <!-- PANTALLA 1: CUARTETAS TV (TABLA OPTIMIZADA DE 6 COLUMNAS) -->
     <div id="viewEquipos" class="fade-in flex-1 bg-[#131B2E] border border-brand-border rounded-2xl p-4 shadow-2xl flex flex-col">
       <h2 class="text-xl font-display font-black uppercase text-white mb-3">Clasificación Cuartetas — Tabla General de Posiciones</h2>
       <div class="overflow-x-auto flex-1">
         <table class="w-full text-left">
           <thead class="bg-[#0A0E17] text-gray-300 font-mono text-xs uppercase border-b border-brand-border">
             <tr>
-              <th class="py-3 px-2 text-center w-10 font-black">POS</th>
-              <th class="py-3 px-3 font-black whitespace-nowrap">EQUIPO</th>
-              <th class="py-3 px-2 text-right font-black">SCRATCH VIE</th>
-              <th class="py-3 px-2 text-center font-black text-amber-300">LB1</th>
-              <th class="py-3 px-3 text-right font-black text-gray-100">TOT VIE C/HDCP</th>
-              <th class="py-3 px-2 text-right font-black">SCRATCH SÁB</th>
-              <th class="py-3 px-2 text-center font-black text-amber-300">LB2</th>
-              <th class="py-3 px-3 text-right font-black text-gray-100">TOT SÁB C/HDCP</th>
-              <th class="py-3 px-4 text-right text-amber-400 font-black">TOTAL GENERAL C/HDCP</th>
-              <th class="py-3 px-3 text-center font-black">ESTADO</th>
+              <th class="py-3 px-3 text-center w-12 font-black">POS</th>
+              <th class="py-3 px-4 font-black whitespace-nowrap">EQUIPO</th>
+              <th class="py-3 px-4 text-right font-black text-gray-100">TOT VIE C/HDCP</th>
+              <th class="py-3 px-4 text-right font-black text-gray-100">TOT SÁB C/HDCP</th>
+              <th class="py-3 px-6 text-right text-amber-400 font-black text-sm">TOTAL GENERAL C/HDCP</th>
+              <th class="py-3 px-4 text-center font-black">ESTADO</th>
             </tr>
           </thead>
           <tbody id="tbodyEquipos" class="divide-y divide-brand-border/60">
@@ -207,11 +203,9 @@
       </div>
     </div>
 
-    <!-- PANTALLA 4: TABLERO OFICIAL DE PREMIACIÓN (DINÁMICO DESDE GOOGLE SHEETS) -->
+    <!-- PANTALLA 4: TABLERO OFICIAL DE PREMIACIÓN -->
     <div id="viewPremios" class="fade-in hidden flex-1 flex flex-col space-y-6">
-      <div id="containerTableroPremiosDinamico">
-        <!-- Render dinámico desde app.js con datos en tiempo real -->
-      </div>
+      <div id="containerTableroPremiosDinamico"></div>
     </div>
 
     <!-- PANTALLA 5: FICHA X EQUIPO -->

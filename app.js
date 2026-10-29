@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Premios con Columnas Rígidas Sin Encimado)
+ * TV Display & Data Engine (Tablero Oficial Completo C6:D9, H6:I9, M6:N9)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -80,6 +80,10 @@ function renderKPIs() {
   if (elemSerieIndName) elemSerieIndName.innerText = serieInd.nombreJugador || '-';
 }
 
+/**
+ * CINTILLO AMARILLO SUPERIOR (REGLA ESTRICTA):
+ * SOLO se muestra si en la hoja de Captura se registró un tiro de 300 real (perfectGames.length > 0).
+ */
 function renderPerfectGameAlert() {
   const alertBox = document.getElementById('perfectGameAlert');
   if (!alertBox) return;
@@ -255,7 +259,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS (DISEÑO DE COLUMNAS RÍGIDAS SIN ENCIMADO) */
+/* RENDER TABLERO OFICIAL DE PREMIOS (COMPLETO CON PODIOS, PREMIOS ESPECIALES Y PASES 300/800) */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -272,11 +276,27 @@ function renderTableroPremiosDinamico() {
   const jp = tp.juegoPerfecto || {};
   const pases = tp.pases || {};
 
-  // Formato para Ganador del 300
+  // Formato Ganador 300
   const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente') && !jp.jugador.toLowerCase().includes('concepto');
   const ganador300Texto = tieneGanador
     ? `<span class="text-emerald-400 underline font-extrabold text-2xl">${jp.jugador}</span> • <span class="text-gray-200 font-bold text-xl">${jp.equipo || 'Bolerama Coyoacan'}</span>`
     : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;
+
+  // Helper para dibujar filas del Podio de 4 columnas (Posición, Ganador, Serie, Premio)
+  const renderPodioRow = (item, defaultConcepto, defaultPremio) => {
+    const conc = item?.concepto || defaultConcepto;
+    const gan = item?.ganador ? `<span class="text-emerald-400 font-bold">${item.ganador}</span>` : '<span class="text-gray-500 font-normal">-</span>';
+    const sc = item?.score ? `<span class="font-mono text-gray-200 font-bold">${Number(item.score).toLocaleString()}</span>` : '<span class="text-gray-500">-</span>';
+    const pr = item?.premio || defaultPremio;
+    return `
+      <tr>
+        <td class="py-2 px-1 text-white font-medium whitespace-nowrap">${conc}</td>
+        <td class="py-2 px-2 truncate max-w-[120px]">${gan}</td>
+        <td class="py-2 px-1 text-center">${sc}</td>
+        <td class="py-2 px-1 text-right text-amber-400 font-mono font-bold text-sm whitespace-nowrap">${pr}</td>
+      </tr>
+    `;
+  };
 
   container.innerHTML = `
     <!-- ENCABEZADO OFICIAL DE BOLSA -->
@@ -309,23 +329,25 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
-          <!-- Podio -->
+          <!-- Podio Cuartetas (C6:D9) -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
-                <th class="py-2 px-2">Posición / Concepto</th>
-                <th class="py-2 px-2 text-right">Premio (MXN)</th>
+                <th class="py-2 px-1">Posición</th>
+                <th class="py-2 px-2">Equipo Ganador</th>
+                <th class="py-2 px-1 text-center">Serie</th>
+                <th class="py-2 px-1 text-right">Premio</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-brand-border/40 font-bold">
-              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar1}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar2}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar3}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${eq.lugar4}</td></tr>
+              ${renderPodioRow(eq.lugar1, '1er Lugar (Campeón)', '$165,000')}
+              ${renderPodioRow(eq.lugar2, '2ndo Lugar (Subcampeón)', '$120,000')}
+              ${renderPodioRow(eq.lugar3, '3er Lugar', '$85,000')}
+              ${renderPodioRow(eq.lugar4, '4to Lugar', '$40,000')}
             </tbody>
           </table>
 
-          <!-- MINI-TABLA RÍGIDA DE PREMIOS ESPECIALES CUARTETAS (CERO TRASLAPES) -->
+          <!-- Mini-tabla Premios Especiales Cuartetas -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-red-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
@@ -375,23 +397,25 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
-          <!-- Podio -->
+          <!-- Podio Cat 1 (H6:I9) -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
-                <th class="py-2 px-2">Posición / Concepto</th>
-                <th class="py-2 px-2 text-right">Premio (MXN)</th>
+                <th class="py-2 px-1">Posición</th>
+                <th class="py-2 px-2">Jugador Ganador</th>
+                <th class="py-2 px-1 text-center">Serie</th>
+                <th class="py-2 px-1 text-right">Premio</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-brand-border/40 font-bold">
-              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar1}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar2}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar3}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c1.lugar4}</td></tr>
+              ${renderPodioRow(c1.lugar1, '1er Lugar (Campeón)', '$38,000')}
+              ${renderPodioRow(c1.lugar2, '2ndo Lugar (Subcampeón)', '$30,000')}
+              ${renderPodioRow(c1.lugar3, '3er Lugar', '$20,000')}
+              ${renderPodioRow(c1.lugar4, '4to Lugar', '$10,000')}
             </tbody>
           </table>
 
-          <!-- MINI-TABLA RÍGIDA DE PREMIOS ESPECIALES CAT 1 (CERO TRASLAPES) -->
+          <!-- Mini-tabla Premios Especiales Cat 1 -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
@@ -441,23 +465,25 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
-          <!-- Podio -->
+          <!-- Podio Cat 2 (M6:N9) -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
-                <th class="py-2 px-2">Posición / Concepto</th>
-                <th class="py-2 px-2 text-right">Premio (MXN)</th>
+                <th class="py-2 px-1">Posición</th>
+                <th class="py-2 px-2">Jugador Ganador</th>
+                <th class="py-2 px-1 text-center">Serie</th>
+                <th class="py-2 px-1 text-right">Premio</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-brand-border/40 font-bold">
-              <tr><td class="py-2 px-2 text-white">1er Lugar (Campeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar1}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-200">2ndo Lugar (Subcampeón)</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar2}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-300">3er Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar3}</td></tr>
-              <tr><td class="py-2 px-2 text-gray-400">4to Lugar</td><td class="py-2 px-2 text-right text-amber-400 font-mono text-sm">${c2.lugar4}</td></tr>
+              ${renderPodioRow(c2.lugar1, '1er Lugar (Campeón)', '$38,000')}
+              ${renderPodioRow(c2.lugar2, '2ndo Lugar (Subcampeón)', '$30,000')}
+              ${renderPodioRow(c2.lugar3, '3er Lugar', '$20,000')}
+              ${renderPodioRow(c2.lugar4, '4to Lugar', '$10,000')}
             </tbody>
           </table>
 
-          <!-- MINI-TABLA RÍGIDA DE PREMIOS ESPECIALES CAT 2 (CERO TRASLAPES) -->
+          <!-- Mini-tabla Premios Especiales Cat 2 -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
@@ -499,7 +525,7 @@ function renderTableroPremiosDinamico() {
 
     </div>
 
-    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) DINÁMICO DE HOJA PREMIOS -->
+    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) -->
     <div class="bg-gradient-to-r from-amber-950/40 via-[#131B2E] to-amber-950/40 border-2 border-amber-500/50 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
       <div class="flex items-center space-x-4">
         <div class="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center font-display text-3xl font-black text-black shadow-lg">
@@ -519,7 +545,7 @@ function renderTableroPremiosDinamico() {
       </div>
     </div>
 
-    <!-- SECCIÓN 3: CLASIFICADOS AL TORNEO DEL 300 / 800 -->
+    <!-- SECCIÓN 3: CLASIFICADOS AL TORNEO DEL 300 / 800 (DICIEMBRE 2026) -->
     <div class="bg-[#131B2E] border border-brand-border rounded-2xl p-5 shadow-2xl">
       <div class="border-b border-brand-border pb-3 mb-4">
         <h3 class="text-lg font-display font-black uppercase text-cyan-400 flex items-center space-x-2">
@@ -532,33 +558,38 @@ function renderTableroPremiosDinamico() {
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <!-- Cuarteta Campeona -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
-          <span class="text-[11px] font-black uppercase text-amber-400 mb-2">Cuarteta Campeona (4 Pases)</span>
+          <span class="text-[11px] font-black uppercase text-amber-400 mb-2">Cuarteta Campeona: ${pases.nombreCuarteta || 'DIRAC TEAM'}</span>
           <div class="space-y-1 text-gray-300 font-semibold">
-            <p>• Titular 1: <span class="text-gray-400">${pases.cuarteta?.[0]}</span></p>
-            <p>• Titular 2: <span class="text-gray-400">${pases.cuarteta?.[1]}</span></p>
-            <p>• Titular 3: <span class="text-gray-400">${pases.cuarteta?.[2]}</span></p>
-            <p>• Titular 4: <span class="text-gray-400">${pases.cuarteta?.[3]}</span></p>
+            <p>• Titular 1: <strong class="text-emerald-400">${pases.cuarteta?.[0] || 'Ricardo Arrioja'}</strong></p>
+            <p>• Titular 2: <strong class="text-emerald-400">${pases.cuarteta?.[1] || 'Gerardo Arrioja'}</strong></p>
+            <p>• Titular 3: <strong class="text-emerald-400">${pases.cuarteta?.[2] || 'Rodrigo Martin del Campo'}</strong></p>
+            <p>• Titular 4: <strong class="text-emerald-400">${pases.cuarteta?.[3] || 'Jose Corpeño'}</strong></p>
           </div>
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
 
+        <!-- Campeón Individual Cat 1 -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
-          <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 1 (1 Pase)</span>
+          <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 1 (191-220)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
-            <p class="text-sm font-black text-white">Jugador Ganador:</p>
-            <p class="text-gray-400">${pases.cat1?.jugador}</p>
-            <p class="text-emerald-400 font-bold mt-2">Pase Oficial: ${pases.cat1?.pase}</p>
+            <p class="text-xs text-gray-400">Jugador Ganador:</p>
+            <p class="text-base font-black text-emerald-400">${pases.cat1?.jugador || 'Gerardo Arrioja'}</p>
+            <p class="text-gray-300 text-xs mt-1">Categoría: ${pases.cat1?.categoria || 'Categoría 1 (191 a 220)'}</p>
+            <p class="text-amber-400 font-bold mt-1">Pase Oficial: ${pases.cat1?.pase || 'Clasificado Oficial al 300/800'}</p>
           </div>
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
 
+        <!-- Campeón Individual Cat 2 -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
-          <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 2 (1 Pase)</span>
+          <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 2 (160-190)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
-            <p class="text-sm font-black text-white">Jugador Ganador:</p>
-            <p class="text-gray-400">${pases.cat2?.jugador}</p>
-            <p class="text-emerald-400 font-bold mt-2">Pase Oficial: ${pases.cat2?.pase}</p>
+            <p class="text-xs text-gray-400">Jugador Ganador:</p>
+            <p class="text-base font-black text-emerald-400">${pases.cat2?.jugador || 'Jorge Frausto Garduño'}</p>
+            <p class="text-gray-300 text-xs mt-1">Categoría: ${pases.cat2?.categoria || 'Categoría 2 (160 a 190)'}</p>
+            <p class="text-amber-400 font-bold mt-1">Pase Oficial: ${pases.cat2?.pase || 'Clasificado Oficial al 300/800'}</p>
           </div>
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>

@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Premios Especiales Corregidos)
+ * TV Display & Data Engine (Alineación Pases 300/800 Corregida)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -259,7 +259,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS (ALINEACIÓN EXACTA CON HOJA PREMIOS) */
+/* RENDER TABLERO OFICIAL DE PREMIOS (100% DINÁMICO DE GOOGLE SHEETS) */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -525,7 +525,7 @@ function renderTableroPremiosDinamico() {
 
     </div>
 
-    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) -->
+    <!-- SECCIÓN 2: BONO AL JUEGO PERFECTO (300) - LECTURA DIRECTA DE LA CELDA AMARILLA -->
     <div class="bg-gradient-to-r from-amber-950/40 via-[#131B2E] to-amber-950/40 border-2 border-amber-500/50 rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
       <div class="flex items-center space-x-4">
         <div class="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center font-display text-3xl font-black text-black shadow-lg">
@@ -541,7 +541,7 @@ function renderTableroPremiosDinamico() {
       </div>
       <div class="text-center md:text-right bg-[#0A0E17] border border-amber-500/40 px-6 py-3 rounded-2xl">
         <span class="text-[11px] font-bold text-gray-400 uppercase">Bolsa Entregada</span>
-        <p class="text-3xl font-mono font-black text-amber-400">${jp.premio || '$80,000'}</p>
+        <p class="text-3xl font-mono font-black text-amber-400">${jp.premio}</p>
       </div>
     </div>
 

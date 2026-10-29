@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Tablero Oficial Completo C6:D9, H6:I9, M6:N9)
+ * TV Display & Data Engine (Alineación Pases 300/800 Corregida)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -80,10 +80,6 @@ function renderKPIs() {
   if (elemSerieIndName) elemSerieIndName.innerText = serieInd.nombreJugador || '-';
 }
 
-/**
- * CINTILLO AMARILLO SUPERIOR (REGLA ESTRICTA):
- * SOLO se muestra si en la hoja de Captura se registró un tiro de 300 real (perfectGames.length > 0).
- */
 function renderPerfectGameAlert() {
   const alertBox = document.getElementById('perfectGameAlert');
   if (!alertBox) return;
@@ -259,7 +255,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS (COMPLETO CON PODIOS, PREMIOS ESPECIALES Y PASES 300/800) */
+/* RENDER TABLERO OFICIAL DE PREMIOS (ALINEACIÓN EXACTA CON HOJA PREMIOS) */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -561,11 +557,11 @@ function renderTableroPremiosDinamico() {
         <!-- Cuarteta Campeona -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-amber-400 mb-2">Cuarteta Campeona: ${pases.nombreCuarteta || 'DIRAC TEAM'}</span>
-          <div class="space-y-1 text-gray-300 font-semibold">
-            <p>• Titular 1: <strong class="text-emerald-400">${pases.cuarteta?.[0] || 'Ricardo Arrioja'}</strong></p>
-            <p>• Titular 2: <strong class="text-emerald-400">${pases.cuarteta?.[1] || 'Gerardo Arrioja'}</strong></p>
-            <p>• Titular 3: <strong class="text-emerald-400">${pases.cuarteta?.[2] || 'Rodrigo Martin del Campo'}</strong></p>
-            <p>• Titular 4: <strong class="text-emerald-400">${pases.cuarteta?.[3] || 'Jose Corpeño'}</strong></p>
+          <div class="space-y-1.5 text-gray-300 font-semibold">
+            <p>• Titular 1: <strong class="text-emerald-400 text-sm">${pases.cuarteta?.[0] || 'Ricardo Arrioja'}</strong></p>
+            <p>• Titular 2: <strong class="text-emerald-400 text-sm">${pases.cuarteta?.[1] || 'Gerardo Arrioja'}</strong></p>
+            <p>• Titular 3: <strong class="text-emerald-400 text-sm">${pases.cuarteta?.[2] || 'Rodrigo Martin del Campo'}</strong></p>
+            <p>• Titular 4: <strong class="text-emerald-400 text-sm">${pases.cuarteta?.[3] || 'Jose Corpeño'}</strong></p>
           </div>
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>

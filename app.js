@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Total c/HDCP Dinámico)
+ * TV Display & Data Engine (Sábado Limpio hasta que se juegue)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -259,7 +259,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS (100% DINÁMICO DE GOOGLE SHEETS) */
+/* RENDER TABLERO OFICIAL DE PREMIOS */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -276,11 +276,13 @@ function renderTableroPremiosDinamico() {
   const jp = tp.juegoPerfecto || {};
   const pases = tp.pases || {};
 
+  // Formato Ganador 300
   const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente') && !jp.jugador.toLowerCase().includes('concepto');
   const ganador300Texto = tieneGanador
     ? `<span class="text-emerald-400 underline font-extrabold text-2xl">${jp.jugador}</span> • <span class="text-gray-200 font-bold text-xl">${jp.equipo || 'Bolerama Coyoacan'}</span>`
     : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;
 
+  // Helper para dibujar filas del Podio
   const renderPodioRow = (item, defaultConcepto, defaultPremio) => {
     const conc = item?.concepto || defaultConcepto;
     const gan = item?.ganador ? `<span class="text-emerald-400 font-bold">${item.ganador}</span>` : '<span class="text-gray-500 font-normal">-</span>';
@@ -292,6 +294,32 @@ function renderTableroPremiosDinamico() {
         <td class="py-2 px-2 truncate max-w-[120px]">${gan}</td>
         <td class="py-2 px-1 text-center">${sc}</td>
         <td class="py-2 px-1 text-right text-amber-400 font-mono font-bold text-sm whitespace-nowrap">${pr}</td>
+      </tr>
+    `;
+  };
+
+  // Helper para dibujar fila de Premios Especiales (Limpio si está pendiente / sábado no jugado)
+  const renderEspecialRow = (label, obj, isEquipo = false) => {
+    const nameRaw = (isEquipo ? obj?.equipo : obj?.jugador) || '';
+    const scoreRaw = obj?.score || '';
+    const premio = obj?.premio || '$0';
+
+    const esValido = nameRaw.trim() !== '' && !nameRaw.toLowerCase().includes('tiro mayor') && !nameRaw.toLowerCase().includes('serie mayor') && nameRaw.trim() !== '-';
+
+    const nameHtml = esValido
+      ? `<strong class="text-emerald-400 font-bold truncate block max-w-[110px]" title="${nameRaw}">${nameRaw}</strong>`
+      : `<span class="text-gray-500 font-normal">-</span>`;
+
+    const scoreHtml = (esValido && scoreRaw.trim() !== '' && scoreRaw.trim() !== '-')
+      ? `(${scoreRaw})`
+      : `-`;
+
+    return `
+      <tr>
+        <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">${label}</td>
+        <td class="py-1.5 px-2">${nameHtml}</td>
+        <td class="py-1.5 px-1 text-center font-mono text-gray-300">${scoreHtml}</td>
+        <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${premio}</td>
       </tr>
     `;
   };
@@ -348,30 +376,10 @@ function renderTableroPremiosDinamico() {
             <p class="text-[11px] font-black uppercase tracking-wider text-red-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
               <tbody class="divide-y divide-brand-border/30">
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Vie:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${eq.tiroVie?.equipo}">${eq.tiroVie?.equipo}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${eq.tiroVie?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${eq.tiroVie?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Sáb:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${eq.tiroSab?.equipo}">${eq.tiroSab?.equipo}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${eq.tiroSab?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${eq.tiroSab?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Vie:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${eq.serieVie?.equipo}">${eq.serieVie?.equipo}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${eq.serieVie?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${eq.serieVie?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Sáb:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${eq.serieSab?.equipo}">${eq.serieSab?.equipo}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${eq.serieSab?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${eq.serieSab?.premio}</td>
-                </tr>
+                ${renderEspecialRow('Tiro Mayor Vie:', eq.tiroVie, true)}
+                ${renderEspecialRow('Tiro Mayor Sáb:', eq.tiroSab, true)}
+                ${renderEspecialRow('Serie Mayor Vie:', eq.serieVie, true)}
+                ${renderEspecialRow('Serie Mayor Sáb:', eq.serieSab, true)}
               </tbody>
             </table>
           </div>
@@ -414,30 +422,10 @@ function renderTableroPremiosDinamico() {
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
               <tbody class="divide-y divide-brand-border/30">
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Vie:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c1.tiroVie?.jugador}">${c1.tiroVie?.jugador}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c1.tiroVie?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c1.tiroVie?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Sáb:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c1.tiroSab?.jugador}">${c1.tiroSab?.jugador}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c1.tiroSab?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c1.tiroSab?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Vie:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c1.serieVie?.jugador}">${c1.serieVie?.jugador}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c1.serieVie?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c1.serieVie?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Sáb:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c1.serieSab?.jugador}">${c1.serieSab?.jugador}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c1.serieSab?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c1.serieSab?.premio}</td>
-                </tr>
+                ${renderEspecialRow('Tiro Mayor Vie:', c1.tiroVie, false)}
+                ${renderEspecialRow('Tiro Mayor Sáb:', c1.tiroSab, false)}
+                ${renderEspecialRow('Serie Mayor Vie:', c1.serieVie, false)}
+                ${renderEspecialRow('Serie Mayor Sáb:', c1.serieSab, false)}
               </tbody>
             </table>
           </div>
@@ -480,30 +468,10 @@ function renderTableroPremiosDinamico() {
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
               <tbody class="divide-y divide-brand-border/30">
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Vie:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c2.tiroVie?.jugador}">${c2.tiroVie?.jugador}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c2.tiroVie?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c2.tiroVie?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Tiro Mayor Sáb:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c2.tiroSab?.jugador}">${c2.tiroSab?.jugador}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c2.tiroSab?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c2.tiroSab?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Vie:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c2.serieVie?.jugador}">${c2.serieVie?.jugador}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c2.serieVie?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c2.serieVie?.premio}</td>
-                </tr>
-                <tr>
-                  <td class="py-1.5 text-gray-400 font-medium whitespace-nowrap">Serie Mayor Sáb:</td>
-                  <td class="py-1.5 px-2 text-emerald-400 font-bold truncate max-w-[110px]" title="${c2.serieSab?.jugador}">${c2.serieSab?.jugador}</td>
-                  <td class="py-1.5 px-1 text-center font-mono text-gray-200">(${c2.serieSab?.score})</td>
-                  <td class="py-1.5 text-right font-mono text-amber-400 font-bold">${c2.serieSab?.premio}</td>
-                </tr>
+                ${renderEspecialRow('Tiro Mayor Vie:', c2.tiroVie, false)}
+                ${renderEspecialRow('Tiro Mayor Sáb:', c2.tiroSab, false)}
+                ${renderEspecialRow('Serie Mayor Vie:', c2.serieVie, false)}
+                ${renderEspecialRow('Serie Mayor Sáb:', c2.serieSab, false)}
               </tbody>
             </table>
           </div>
@@ -550,6 +518,7 @@ function renderTableroPremiosDinamico() {
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <!-- Cuarteta Campeona -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-amber-400 mb-2">Cuarteta Campeona: ${pases.nombreCuarteta || 'DIRAC TEAM'}</span>
           <div class="space-y-1.5 text-gray-300 font-semibold">
@@ -561,6 +530,7 @@ function renderTableroPremiosDinamico() {
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
 
+        <!-- Campeón Individual Cat 1 -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 1 (191-220)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
@@ -572,6 +542,7 @@ function renderTableroPremiosDinamico() {
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
 
+        <!-- Campeón Individual Cat 2 -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 2 (160-190)</span>
           <div class="space-y-1 text-gray-300 font-semibold">

@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Cuartetas con 6 Columnas Optimizadas)
+ * TV Display & Data Engine (Total c/HDCP Dinámico)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -132,24 +132,13 @@ function renderTableEquipos() {
     row.className = 'bg-[#18233A] text-white text-lg font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
     row.innerHTML = `
-      <!-- 1. POS -->
       <td class="py-3 px-3 text-center font-black font-mono text-xl text-amber-400">${pos}</td>
-      
-      <!-- 2. EQUIPO -->
       <td class="py-3 px-4 font-extrabold text-xl text-white whitespace-nowrap">${eq.nombreEquipo || '-'}</td>
-      
-      <!-- 3. TOT VIE C/HDCP -->
       <td class="py-3 px-4 text-right font-mono font-extrabold text-gray-100 text-xl">${Number(eq.totVieHdcp || 0).toLocaleString()}</td>
-      
-      <!-- 4. TOT SÁB C/HDCP -->
       <td class="py-3 px-4 text-right font-mono font-extrabold text-gray-100 text-xl">${Number(eq.totSabHdcp || 0).toLocaleString()}</td>
-      
-      <!-- 5. TOTAL GENERAL C/HDCP -->
       <td class="py-3 px-6 text-right font-mono font-black text-amber-400 text-2xl bg-amber-500/10">
         ${Number(eq.granTotHdcp || 0).toLocaleString()}
       </td>
-      
-      <!-- 6. ESTADO -->
       <td class="py-3 px-4 text-center text-xs whitespace-nowrap ${estadoColor}">
         ${estado}
       </td>
@@ -182,6 +171,8 @@ function renderTableCat1() {
       estatusColor = 'text-gray-500 font-normal';
     }
 
+    const totalHdcpVal = (j.totHdcp !== undefined && j.totHdcp !== null) ? Number(j.totHdcp) : 0;
+
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
@@ -202,7 +193,7 @@ function renderTableCat1() {
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l8 || '-'}</td>
       <td class="py-2.5 px-2.5 text-right font-mono font-extrabold text-gray-100 text-base whitespace-nowrap">${Number(j.totScratch || 0).toLocaleString()}</td>
       <td class="py-2.5 px-3 text-right font-mono font-black text-amber-400 text-xl bg-amber-500/10 whitespace-nowrap">
-        ${Number(j.totHdcp || 0).toLocaleString()}
+        ${totalHdcpVal.toLocaleString()}
       </td>
       <td class="py-2.5 px-3 text-center text-xs whitespace-nowrap ${estatusColor}">
         ${estatusBuffet}
@@ -236,6 +227,8 @@ function renderTableCat2() {
       estatusColor = 'text-gray-500 font-normal';
     }
 
+    const totalHdcpVal = (j.totHdcp !== undefined && j.totHdcp !== null) ? Number(j.totHdcp) : 0;
+
     const row = document.createElement('tr');
     row.className = 'bg-[#18233A] text-white font-bold hover:bg-[#1E2C4A] border-b border-brand-border';
     
@@ -256,7 +249,7 @@ function renderTableCat2() {
       <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${l.l8 || '-'}</td>
       <td class="py-2.5 px-2.5 text-right font-mono font-extrabold text-gray-100 text-base whitespace-nowrap">${Number(j.totScratch || 0).toLocaleString()}</td>
       <td class="py-2.5 px-3 text-right font-mono font-black text-amber-400 text-xl bg-amber-500/10 whitespace-nowrap">
-        ${Number(j.totHdcp || 0).toLocaleString()}
+        ${totalHdcpVal.toLocaleString()}
       </td>
       <td class="py-2.5 px-3 text-center text-xs whitespace-nowrap ${estatusColor}">
         ${estatusBuffet}
@@ -266,7 +259,7 @@ function renderTableCat2() {
   });
 }
 
-/* RENDER TABLERO OFICIAL DE PREMIOS */
+/* RENDER TABLERO OFICIAL DE PREMIOS (100% DINÁMICO DE GOOGLE SHEETS) */
 function renderTableroPremiosDinamico() {
   const container = document.getElementById('containerTableroPremiosDinamico');
   if (!container) return;
@@ -283,13 +276,11 @@ function renderTableroPremiosDinamico() {
   const jp = tp.juegoPerfecto || {};
   const pases = tp.pases || {};
 
-  // Formato Ganador 300
   const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente') && !jp.jugador.toLowerCase().includes('concepto');
   const ganador300Texto = tieneGanador
     ? `<span class="text-emerald-400 underline font-extrabold text-2xl">${jp.jugador}</span> • <span class="text-gray-200 font-bold text-xl">${jp.equipo || 'Bolerama Coyoacan'}</span>`
     : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;
 
-  // Helper para dibujar filas del Podio de 4 columnas (Posición, Ganador, Serie, Premio)
   const renderPodioRow = (item, defaultConcepto, defaultPremio) => {
     const conc = item?.concepto || defaultConcepto;
     const gan = item?.ganador ? `<span class="text-emerald-400 font-bold">${item.ganador}</span>` : '<span class="text-gray-500 font-normal">-</span>';
@@ -336,7 +327,6 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
-          <!-- Podio Cuartetas (C6:D9) -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
@@ -354,7 +344,6 @@ function renderTableroPremiosDinamico() {
             </tbody>
           </table>
 
-          <!-- Mini-tabla Premios Especiales Cuartetas -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-red-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
@@ -404,7 +393,6 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
-          <!-- Podio Cat 1 (H6:I9) -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
@@ -422,7 +410,6 @@ function renderTableroPremiosDinamico() {
             </tbody>
           </table>
 
-          <!-- Mini-tabla Premios Especiales Cat 1 -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
@@ -472,7 +459,6 @@ function renderTableroPremiosDinamico() {
             </h3>
           </div>
           
-          <!-- Podio Cat 2 (M6:N9) -->
           <table class="w-full text-left text-xs mb-4">
             <thead class="bg-[#0A0E17] text-gray-400 uppercase font-mono border-b border-brand-border/60">
               <tr>
@@ -490,7 +476,6 @@ function renderTableroPremiosDinamico() {
             </tbody>
           </table>
 
-          <!-- Mini-tabla Premios Especiales Cat 2 -->
           <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3 mb-2">
             <p class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-2">Premios Especiales c/HDCP</p>
             <table class="w-full text-left text-xs">
@@ -565,7 +550,6 @@ function renderTableroPremiosDinamico() {
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <!-- Cuarteta Campeona -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-amber-400 mb-2">Cuarteta Campeona: ${pases.nombreCuarteta || 'DIRAC TEAM'}</span>
           <div class="space-y-1.5 text-gray-300 font-semibold">
@@ -577,7 +561,6 @@ function renderTableroPremiosDinamico() {
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
 
-        <!-- Campeón Individual Cat 1 -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 1 (191-220)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
@@ -589,7 +572,6 @@ function renderTableroPremiosDinamico() {
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
 
-        <!-- Campeón Individual Cat 2 -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 2 (160-190)</span>
           <div class="space-y-1 text-gray-300 font-semibold">

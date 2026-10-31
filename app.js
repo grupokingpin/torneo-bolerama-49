@@ -1,6 +1,6 @@
 /**
  * BOLERAMA COYOACAN • TORNEO 49 Aniversario 2026
- * TV Display & Data Engine (Sábado Limpio hasta que se juegue)
+ * TV Display & Data Engine (Ficha por Equipo sin HDCPs)
  */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbzSsYtxcfCJcxTyat3z6jvd5iYilXxPB8lOc5EgIoVdu8J41BM8u_FMnCie61k1IpWm/exec';
@@ -276,13 +276,11 @@ function renderTableroPremiosDinamico() {
   const jp = tp.juegoPerfecto || {};
   const pases = tp.pases || {};
 
-  // Formato Ganador 300
   const tieneGanador = jp.jugador && jp.jugador.trim() !== '' && !jp.jugador.toLowerCase().includes('pendiente') && !jp.jugador.toLowerCase().includes('concepto');
   const ganador300Texto = tieneGanador
     ? `<span class="text-emerald-400 underline font-extrabold text-2xl">${jp.jugador}</span> • <span class="text-gray-200 font-bold text-xl">${jp.equipo || 'Bolerama Coyoacan'}</span>`
     : `<span class="text-gray-400 italic">Disponible (Pendiente de Tirada)</span>`;
 
-  // Helper para dibujar filas del Podio
   const renderPodioRow = (item, defaultConcepto, defaultPremio) => {
     const conc = item?.concepto || defaultConcepto;
     const gan = item?.ganador ? `<span class="text-emerald-400 font-bold">${item.ganador}</span>` : '<span class="text-gray-500 font-normal">-</span>';
@@ -298,7 +296,6 @@ function renderTableroPremiosDinamico() {
     `;
   };
 
-  // Helper para dibujar fila de Premios Especiales (Limpio si está pendiente / sábado no jugado)
   const renderEspecialRow = (label, obj, isEquipo = false) => {
     const nameRaw = (isEquipo ? obj?.equipo : obj?.jugador) || '';
     const scoreRaw = obj?.score || '';
@@ -518,7 +515,6 @@ function renderTableroPremiosDinamico() {
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <!-- Cuarteta Campeona -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-amber-400 mb-2">Cuarteta Campeona: ${pases.nombreCuarteta || 'DIRAC TEAM'}</span>
           <div class="space-y-1.5 text-gray-300 font-semibold">
@@ -530,7 +526,6 @@ function renderTableroPremiosDinamico() {
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
 
-        <!-- Campeón Individual Cat 1 -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 1 (191-220)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
@@ -542,7 +537,6 @@ function renderTableroPremiosDinamico() {
           <span class="text-[10px] text-gray-400 border-t border-brand-border/60 pt-2 mt-2">Sede: Bolerama Coyoacán • Dic 2026</span>
         </div>
 
-        <!-- Campeón Individual Cat 2 -->
         <div class="bg-[#0A0E17] border border-brand-border rounded-xl p-3.5 flex flex-col justify-between">
           <span class="text-[11px] font-black uppercase text-emerald-400 mb-2">Campeón Individual Cat 2 (160-190)</span>
           <div class="space-y-1 text-gray-300 font-semibold">
@@ -570,6 +564,7 @@ function populateDetailSelect() {
   });
 }
 
+/* RENDER FICHA POR EQUIPO (SIN HDCP EQUIPO NI HDCP BAKER) */
 function renderEquipoDetailContent() {
   const container = document.getElementById('containerEquipoDetailContent');
   const select = document.getElementById('selectDetailEquipo');
@@ -581,11 +576,16 @@ function renderEquipoDetailContent() {
 
   container.innerHTML = `
     <div class="space-y-4 text-white">
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#0A0E17] p-3 rounded-xl border border-brand-border">
-        <div><span class="text-[11px] text-gray-400 font-bold uppercase">Posición</span><p class="text-2xl font-black text-amber-400">#${eq.posicion}</p></div>
-        <div><span class="text-[11px] text-gray-400 font-bold uppercase">HDCP Equipo</span><p class="text-2xl font-black text-white">+${eq.hdcpEquipo}</p></div>
-        <div><span class="text-[11px] text-gray-400 font-bold uppercase">HDCP Baker</span><p class="text-2xl font-black text-white">+${eq.hdcpBaker}</p></div>
-        <div><span class="text-[11px] text-gray-400 font-bold uppercase">Total c/HDCP</span><p class="text-2xl font-black text-emerald-400">${Number(eq.granTotHdcp).toLocaleString()}</p></div>
+      <!-- CABECERA SIN HDCP EQUIPO NI HDCP BAKER -->
+      <div class="grid grid-cols-2 gap-4 bg-[#0A0E17] p-4 rounded-xl border border-brand-border max-w-lg">
+        <div>
+          <span class="text-xs text-gray-400 font-bold uppercase">Posición</span>
+          <p class="text-3xl font-black text-amber-400 mt-1">#${eq.posicion}</p>
+        </div>
+        <div>
+          <span class="text-xs text-gray-400 font-bold uppercase">Total c/HDCP</span>
+          <p class="text-3xl font-black text-emerald-400 mt-1">${Number(eq.granTotHdcp).toLocaleString()}</p>
+        </div>
       </div>
       
       <div class="overflow-x-auto">
@@ -605,24 +605,27 @@ function renderEquipoDetailContent() {
             </tr>
           </thead>
           <tbody class="divide-y divide-brand-border/40 font-bold">
-            ${(eq.jugadores || []).map(j => `
-              <tr class="hover:bg-[#1E2C4A]">
-                <td class="py-2.5 px-2 text-white font-extrabold whitespace-nowrap max-w-[200px] truncate" title="${j.nombreJugador}">
-                  ${j.nombreJugador}
-                </td>
-                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l1 || 0}</td>
-                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l2 || 0}</td>
-                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l3 || 0}</td>
-                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l4 || 0}</td>
-                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l5 || 0}</td>
-                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l6 || 0}</td>
-                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l7 || 0}</td>
-                <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l8 || 0}</td>
-                <td class="py-2.5 px-3 text-right text-amber-400 font-mono text-lg font-black whitespace-nowrap bg-amber-500/5">
-                  ${Number(j.totHdcp || 0).toLocaleString()}
-                </td>
-              </tr>
-            `).join('')}
+            ${(eq.jugadores || []).map(j => {
+              const totalHdcpVal = (j.totHdcp !== undefined && j.totHdcp !== null) ? Number(j.totHdcp) : 0;
+              return `
+                <tr class="hover:bg-[#1E2C4A]">
+                  <td class="py-2.5 px-2 text-white font-extrabold whitespace-nowrap max-w-[200px] truncate" title="${j.nombreJugador}">
+                    ${j.nombreJugador}
+                  </td>
+                  <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l1 || 0}</td>
+                  <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l2 || 0}</td>
+                  <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l3 || 0}</td>
+                  <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l4 || 0}</td>
+                  <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l5 || 0}</td>
+                  <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l6 || 0}</td>
+                  <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l7 || 0}</td>
+                  <td class="py-2.5 px-1.5 text-center font-mono text-gray-300 text-sm">${j.lineas?.l8 || 0}</td>
+                  <td class="py-2.5 px-3 text-right text-amber-400 font-mono text-lg font-black whitespace-nowrap bg-amber-500/5">
+                    ${totalHdcpVal.toLocaleString()}
+                  </td>
+                </tr>
+              `;
+            }).join('')}
           </tbody>
         </table>
       </div>
